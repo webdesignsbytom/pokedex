@@ -1,14 +1,13 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { ScrollView } from 'react-native'
 // Components
 import CardGridContainer from '@/components/CardGridContainer'
 
 const AllCards = () => {
   return (
-    <View>
-      <Text>allCards</Text>
+    <ScrollView>
       <CardGridContainer />
-    </View>
+    </ScrollView>
   )
 }
 

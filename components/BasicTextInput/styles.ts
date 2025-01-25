@@ -11,7 +11,7 @@ export const InputWrapper = styled.View`
   position: relative;
   padding: 0 20px;
   max-width: 400px;
-    background-color: "#ee4037";
+  background-color: "#ee4037";
 `;
 
 export const Input = styled.TextInput<InputProps>`

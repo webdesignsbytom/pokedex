@@ -38,7 +38,7 @@ module.exports = {
     apiUrl: process.env.REACT_APP_API_URL,
     userToken: process.env.REACT_APP_USER_TOKEN,
     eas: {
-      projectId: "",
+      projectId: "6ce4dc4e-7c5c-460a-bf52-6109148ee306",
     },
   },
   plugins: [
