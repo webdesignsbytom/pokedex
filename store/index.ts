@@ -2,6 +2,31 @@ import { StateCreator, create } from "zustand";
 import { Appearance } from "react-native";
 import { persist, PersistOptions } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// Interfaces
+import { Card } from '@/interfaces';
+
+interface UserCardsState {
+  userCards: Card[];
+  setUserCards: (cards: Card[]) => void;
+}
+
+type CardsPersist = (
+  config: StateCreator<UserCardsState>,
+  options: PersistOptions<UserCardsState>
+) => StateCreator<UserCardsState>;
+
+export const useCardsPersistentStore = create<UserCardsState>(
+  (persist as unknown as CardsPersist)(
+    (set) => ({
+      userCards: [],
+      setUserCards: (userCards) => set({ userCards }),
+    }),
+    {
+      name: "user-cards-storage",
+      // getStorage: () => AsyncStorage,
+    }
+  )
+);
 
 export type AppTheme = "light" | "dark";
 

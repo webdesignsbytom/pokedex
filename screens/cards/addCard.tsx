@@ -20,7 +20,7 @@ const AddCard = () => {
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ['images'], // Updated to use the new array format
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 4],
       quality: 1,
       base64: true,
     });

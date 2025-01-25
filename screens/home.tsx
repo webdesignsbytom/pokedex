@@ -5,8 +5,12 @@ import GridContainer from '@/components/GridContainer';
 import { themeCommon } from '@/styles/theme';
 // Images
 import PokeballImage from '../assets/images/pokeball.png'
+// Store
+// import { useCardsPersistentStore } from '@/store';
 
 function HomeScreen() {
+  // const persistentPlantsStore = useCardsPersistentStore((state) => state);
+
   return (
     <View style={styles.container}>
       <ImageBackground source={PokeballImage} resizeMode="cover" style={styles.image}>
