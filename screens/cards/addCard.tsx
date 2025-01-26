@@ -9,7 +9,6 @@ import { Card, CardCondition } from '../../interfaces';
 import BasicTextInput from '../../components/BasicTextInput';
 
 const AddCard = () => {
-  const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<string>(''); // Updated type
   const [name, setName] = useState(''); // State for the card name
   const [set, setSet] = useState(''); // State for the card set
@@ -58,6 +57,7 @@ const AddCard = () => {
       setName('');
       setNumber('');
       setImage('');
+      setSet('');
       setCondition(CardCondition.Good); // Reset condition to default
     } catch (error) {
       console.error('Error saving card:', error);
@@ -83,23 +83,23 @@ const AddCard = () => {
       <BasicTextInput
         value={name}
         label='Card Name'
-        placeholder='Enter card name'
         onChangeText={setName} // Update the state when text changes
+        placeholder='Enter card name'
       />
 
       {/* BasicTextInput for card number */}
       <BasicTextInput
         value={number}
         label='Card Number'
-        placeholder='Enter card number'
         onChangeText={setNumber}
+        placeholder='Enter card number'
       />
 
       <BasicTextInput
         value={set}
         label='Card Set'
+        onChangeText={setSet}
         placeholder='Enter card set'
-        onChangeText={setNumber}
       />
 
       {/* Dropdown to select card condition */}

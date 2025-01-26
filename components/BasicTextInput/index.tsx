@@ -25,7 +25,6 @@ const BasicTextInput = ({
   onBlur,
   textarea,
   hideInput,
-  error,
 }: Props): JSX.Element => {
   return (
     <View style={styles.container}>
@@ -35,7 +34,7 @@ const BasicTextInput = ({
         value={value}
         onChangeText={onChangeText}
         onBlur={onBlur}
-        multiline={textarea}
+        multiline={textarea || false}
         textAlignVertical='top'
         autoCapitalize='none'
         secureTextEntry={hideInput}
