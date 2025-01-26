@@ -2,12 +2,19 @@ import { View, Text, Button, Image, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import BasicTextInput from '@/components/BasicTextInput'; // Import BasicTextInput
+import { useCardsPersistentStore } from '@/store';
+import { Card, CardCondition } from '@/interfaces';
+// Images
+import CardBack from '../../assets/images/pokemon-card-back.jpg'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddCard = () => {
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState<string | null>(null); // Updated type
+  const [image, setImage] = useState<string>(CardBack); // Updated type
   const [name, setName] = useState(''); // State for the card name
   const [number, setNumber] = useState(''); // State for the card number
+
+  const { userCards, setUserCards } = useCardsPersistentStore(); // Get the store state and action
 
   const handleTakePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -30,11 +37,30 @@ const AddCard = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Handle the submission of the card details here
-    console.log('Card Name:', name);
-    console.log('Card Number:', number);
-    console.log('Card Image URI:', image);
+  const handleSaveCard = async () => {
+    const newCard: Card = {
+      name,
+      image,
+      number: number || null,
+      set: null,
+      condition: CardCondition.Good || null,
+    };
+    try {
+      // Get existing cards from AsyncStorage
+      const storedCards = await AsyncStorage.getItem('userCards');
+      const cards = storedCards ? JSON.parse(storedCards) : [];
+      cards.push(newCard);
+
+      // Save updated cards back to AsyncStorage
+      await AsyncStorage.setItem('userCards', JSON.stringify(cards));
+
+      // Clear form
+      setName('');
+      setNumber('');
+      setImage('null');
+    } catch (error) {
+      console.error('Error saving card:', error);
+    }
   };
 
   return (
@@ -69,7 +95,7 @@ const AddCard = () => {
       />
 
       {/* Submit button */}
-      <Button title='Submit' onPress={handleSubmit} />
+      <Button title='Submit' onPress={handleSaveCard} />
     </View>
   );
 };

@@ -24,7 +24,7 @@ export enum CardCondition {
 export interface Card {
   name: string;
   image: string;
-  number: number;
-  set: string;
-  condition: CardCondition; 
+  number: string | null;
+  set: string | null;
+  condition: CardCondition | null; 
 }

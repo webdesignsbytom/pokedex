@@ -1,34 +1,40 @@
-import { Card, CardCondition } from '@/interfaces';
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// Components
 import SmallCardItem from '../SmallCardItem';
+// Interfaces
+import { Card } from '@/interfaces';
 
 const CardGridContainer = () => {
-  // Example cards array, replace with your actual data (e.g., from state or storage)
-  const cards: Card[] = [
-    {
-      name: 'Pikachu',
-      image: 'https://example.com/pikachu.jpg', // Replace with actual URI
-      number: 25,
-      set: '',
-      condition: CardCondition.Mint,
-    },
-    {
-      name: 'Charmander',
-      image: 'https://example.com/charmander.jpg', // Replace with actual URI
-      number: 4,
-      set: '',
-      condition: CardCondition.Mint
-    },
-  ];
+  const [cards, setCards] = useState<Card[]>([]);
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        // Retrieve stored cards from AsyncStorage
+        const storedCards = await AsyncStorage.getItem('userCards');
+        if (storedCards) {
+          // Parse the stored cards and set the state
+          setCards(JSON.parse(storedCards));
+        }
+      } catch (error) {
+        console.error('Error fetching cards:', error);
+      }
+    };
+
+    fetchCards();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <View style={styles.grid}>
-        {cards.map((card) => (
-          <SmallCardItem key={card.number} card={card} />
-        ))}
-      </View>
+      <FlatList
+        data={cards}
+        keyExtractor={(item) => item.number ? item.number.toString() : Math.random().toString()} 
+        renderItem={({ item }) => <SmallCardItem card={item} />}
+        numColumns={2} // Adjust for the grid layout
+        contentContainerStyle={styles.grid}
+      />
     </View>
   );
 };
@@ -42,8 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: 18,
     justifyContent: 'center',
   },
