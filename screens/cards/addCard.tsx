@@ -4,15 +4,18 @@ import * as ImagePicker from 'expo-image-picker';
 import BasicTextInput from '@/components/BasicTextInput'; // Import BasicTextInput
 import { useCardsPersistentStore } from '@/store';
 import { Card, CardCondition } from '@/interfaces';
-// Images
-import CardBack from '../../assets/images/pokemon-card-back.jpg'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Import Picker from the picker library
+import { Picker } from '@react-native-picker/picker';
 
 const AddCard = () => {
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState<string>(CardBack); // Updated type
+  const [image, setImage] = useState<string>(''); // Updated type
   const [name, setName] = useState(''); // State for the card name
+  const [set, setSet] = useState(''); // State for the card set
   const [number, setNumber] = useState(''); // State for the card number
+  const [condition, setCondition] = useState<CardCondition>(CardCondition.Good); // State for the card condition
 
   const { userCards, setUserCards } = useCardsPersistentStore(); // Get the store state and action
 
@@ -43,7 +46,7 @@ const AddCard = () => {
       image,
       number: number || null,
       set: null,
-      condition: CardCondition.Good || null,
+      condition: condition || null, // Use selected condition
     };
     try {
       // Get existing cards from AsyncStorage
@@ -57,7 +60,8 @@ const AddCard = () => {
       // Clear form
       setName('');
       setNumber('');
-      setImage('null');
+      setImage('');
+      setCondition(CardCondition.Good); // Reset condition to default
     } catch (error) {
       console.error('Error saving card:', error);
     }
@@ -94,6 +98,26 @@ const AddCard = () => {
         onChangeText={setNumber}
       />
 
+      <BasicTextInput
+        value={set}
+        label='Card Set'
+        placeholder='Enter card set'
+        onChangeText={setNumber}
+      />
+
+      {/* Dropdown to select card condition */}
+      <Text style={styles.label}>Condition</Text>
+      <Picker
+        selectedValue={condition}
+        onValueChange={(itemValue) => setCondition(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label='Bad' value={CardCondition.Bad} />
+        <Picker.Item label='Good' value={CardCondition.Good} />
+        <Picker.Item label='Excellent' value={CardCondition.Excellent} />
+        <Picker.Item label='Mint' value={CardCondition.Mint} />
+      </Picker>
+
       {/* Submit button */}
       <Button title='Submit' onPress={handleSaveCard} />
     </View>
@@ -113,5 +137,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginTop: 16,
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+    marginTop: 8,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 8,
   },
 });

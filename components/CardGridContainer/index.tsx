@@ -32,7 +32,7 @@ const CardGridContainer = () => {
         data={cards}
         keyExtractor={(item) => item.number ? item.number.toString() : Math.random().toString()} 
         renderItem={({ item }) => <SmallCardItem card={item} />}
-        numColumns={2} // Adjust for the grid layout
+        numColumns={3} // Adjust for the grid layout
         contentContainerStyle={styles.grid}
       />
     </View>

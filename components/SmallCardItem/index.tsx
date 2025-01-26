@@ -13,6 +13,7 @@ const SmallCardItem: React.FC<SmallCardItemProps> = ({ card }) => {
     <View key={card.number} style={styles.card}>
       <Image source={{ uri: card.image }} style={styles.image} />
       <Text style={styles.text}>{card.name}</Text>
+      <Text style={styles.text}>{card.set}</Text>
       <Text style={styles.text}>#{card.number}</Text>
       <Text style={styles.text}>Condition: {card.condition}</Text>  {/* Display the condition */}
     </View>
@@ -23,8 +24,8 @@ export default SmallCardItem;
 
 const styles = StyleSheet.create({
   card: {
-    width: 120,
-    height: 150,
+    width: '33%',
+    height: 'auto',
     backgroundColor: '#fff',
     borderRadius: 8,
     padding: 8,
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   image: {
     width: 80,
     height: 80,
-    borderRadius: 40,
+    borderRadius: 2,
     marginBottom: 8,
   },
   text: {
