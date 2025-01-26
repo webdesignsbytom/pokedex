@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, Button, Image, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Card, CardCondition } from '../../interfaces';
-import BasicTextInput from '../../components/BasicTextInput'; // Import BasicTextInput
-
-// Import Picker from the picker library
 import { Picker } from '@react-native-picker/picker';
+// Interfaces
+import { Card, CardCondition } from '../../interfaces';
+// Components
+import BasicTextInput from '../../components/BasicTextInput';
 
 const AddCard = () => {
   const [loading, setLoading] = useState(false);
