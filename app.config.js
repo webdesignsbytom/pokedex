@@ -22,6 +22,11 @@ module.exports = {
     supportsTablet: true,
     bundleIdentifier: "com.bytetoast.pokedex",
     buildNumber: "1.0.0",
+    infoPlist: {
+      NSCameraUsageDescription: "Allow Pokedex to use your camera to take photos of your cards.",
+      NSPhotoLibraryUsageDescription: "Allow Pokedex to access your photo library to select card images.",
+      NSPhotoLibraryAddUsageDescription: "Allow Pokedex to save card images to your photo library."
+    }
   },
   android: {
     adaptiveIcon: {
@@ -30,6 +35,10 @@ module.exports = {
     },
     package: "com.bytetoast.pokedex",
     versionCode: 1,
+    permissions: [
+      "CAMERA",
+      "WRITE_EXTERNAL_STORAGE"
+    ]
   },
   web: {
     favicon: "./assets/favicon/favicon-96x96.png",

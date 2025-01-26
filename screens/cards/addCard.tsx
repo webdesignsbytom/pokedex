@@ -24,15 +24,15 @@ const AddCard = () => {
     }
 
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ['images'], // Updated to use the new array format
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // Updated to use the new array format
       allowsEditing: true,
       aspect: [3, 4],
       quality: 1,
       base64: true,
     });
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri); // Update to access `assets` array
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImage(result.assets[0].uri); // Accessing safely
     }
   };
 
@@ -47,9 +47,12 @@ const AddCard = () => {
     try {
       // Get existing cards from AsyncStorage
       const storedCards = await AsyncStorage.getItem('userCards');
-      const cards = storedCards ? JSON.parse(storedCards) : [];
-      cards.push(newCard);
-
+      let cards = [];
+      try {
+        cards = storedCards ? JSON.parse(storedCards) : [];
+      } catch (error) {
+        console.warn('Error parsing userCards:', error);
+      }
       // Save updated cards back to AsyncStorage
       await AsyncStorage.setItem('userCards', JSON.stringify(cards));
 
