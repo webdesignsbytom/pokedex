@@ -10,9 +10,9 @@ import BasicTextInput from '../../components/BasicTextInput';
 
 const AddCard = () => {
   const [image, setImage] = useState<string>(''); // Updated type
-  const [name, setName] = useState(''); // State for the card name
-  const [set, setSet] = useState(''); // State for the card set
-  const [number, setNumber] = useState(''); // State for the card number
+  const [name, setName] = useState<string>(''); // State for the card name
+  const [set, setSet] = useState<string>(''); // State for the card set
+  const [number, setNumber] = useState<string>(''); // State for the card number
   const [condition, setCondition] = useState<CardCondition>(CardCondition.Good); // State for the card condition
 
   const handleTakePhoto = async () => {
@@ -24,7 +24,7 @@ const AddCard = () => {
     }
 
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images, // Updated to use the new array format
+      // mediaTypes: ["Images"], 
       allowsEditing: true,
       aspect: [3, 4],
       quality: 1,
@@ -53,6 +53,8 @@ const AddCard = () => {
       } catch (error) {
         console.warn('Error parsing userCards:', error);
       }
+      cards.push(newCard);
+      
       // Save updated cards back to AsyncStorage
       await AsyncStorage.setItem('userCards', JSON.stringify(cards));
 
