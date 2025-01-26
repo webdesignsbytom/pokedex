@@ -1,6 +1,6 @@
-import React from "react";
-import { Platform, Text } from "react-native";
-import { Input, InputWrapper, InputLabel } from "./styles";
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { Platform, Text, TextInput, View } from 'react-native';
 
 const TEXTAREA_NUMBER_OF_LINES = 4;
 const IOS_LINE_HEIGHT_PX = 20;
@@ -27,30 +27,50 @@ const BasicTextInput = ({
   hideInput,
   error,
 }: Props): JSX.Element => {
-
   return (
-    <InputWrapper>
-      {label && <InputLabel>{label}</InputLabel>}
-      <Input
+    <View style={styles.container}>
+      {label && <Text style={styles.label}>{label}</Text>}
+      <TextInput
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}
         onBlur={onBlur}
         multiline={textarea}
-        textAlignVertical="top"
-        autoCapitalize="none"
+        textAlignVertical='top'
+        autoCapitalize='none'
         secureTextEntry={hideInput}
-        errorBorder={!!error}
         numberOfLines={textarea ? TEXTAREA_NUMBER_OF_LINES : 1}
-        style={
-          Platform.OS === "ios" && textarea
+        style={[
+          styles.input,
+          Platform.OS === 'ios' && textarea
             ? { height: TEXTAREA_NUMBER_OF_LINES * IOS_LINE_HEIGHT_PX }
-            : null
-        }
+            : null,
+        ]}
       />
-      {error && <Text style={{ color: 'red' }}>{error}</Text>}
-    </InputWrapper>
+    </View>
   );
 };
 
 export default BasicTextInput;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row', // Horizontal layout
+    alignItems: 'center', // Align vertically in the center
+    marginVertical: 8, // Add vertical spacing
+  },
+  label: {
+    marginRight: 10, // Space between label and input
+    fontSize: 16, // Label font size
+    fontWeight: 'bold',
+  },
+  input: {
+    flex: 1, // Take the remaining space
+    borderWidth: 1,
+    borderColor: '#ccc',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    fontSize: 16,
+  },
+});

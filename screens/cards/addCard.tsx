@@ -1,10 +1,9 @@
-import { View, Text, Button, Image, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
+import { View, Text, Button, Image, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import BasicTextInput from '@/components/BasicTextInput'; // Import BasicTextInput
-import { useCardsPersistentStore } from '@/store';
-import { Card, CardCondition } from '@/interfaces';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Card, CardCondition } from '../../interfaces';
+import BasicTextInput from '../../components/BasicTextInput'; // Import BasicTextInput
 
 // Import Picker from the picker library
 import { Picker } from '@react-native-picker/picker';
@@ -16,8 +15,6 @@ const AddCard = () => {
   const [set, setSet] = useState(''); // State for the card set
   const [number, setNumber] = useState(''); // State for the card number
   const [condition, setCondition] = useState<CardCondition>(CardCondition.Good); // State for the card condition
-
-  const { userCards, setUserCards } = useCardsPersistentStore(); // Get the store state and action
 
   const handleTakePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -149,5 +146,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     backgroundColor: '#f2f2f2',
     borderRadius: 8,
+    paddingVertical: 12
   },
 });
