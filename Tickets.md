@@ -9,3 +9,4 @@
 7. Fix value buttons
 8. Get value total
 9. Dropdown for all card sets
+10. Smarter card stats
