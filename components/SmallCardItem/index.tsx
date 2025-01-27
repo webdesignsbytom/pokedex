@@ -1,21 +1,24 @@
 import { View, Text, Image, StyleSheet } from 'react-native';
 import React from 'react';
+// Interfaces
+import { Card } from '../../interfaces'; // Import the Card interface
 
-import { Card } from '@/interfaces';  // Import the Card interface
-
-// Add card as a prop to SmallCardItem
 interface SmallCardItemProps {
-  card: Card;  // Define the type for the card prop
+  card: Card;
 }
 
 const SmallCardItem: React.FC<SmallCardItemProps> = ({ card }) => {
   return (
     <View key={card.number} style={styles.card}>
       <Image source={{ uri: card.image }} style={styles.image} />
-      <Text style={styles.text}>{card.name}</Text>
-      <Text style={styles.text}>{card.set}</Text>
-      <Text style={styles.text}>#{card.number}</Text>
-      <Text style={styles.text}>Condition: {card.condition}</Text>  {/* Display the condition */}
+      <View style={styles.cardData}>
+        <Text style={styles.text}>{card.name}</Text>
+        <Text style={styles.text}>Set: {card.set}</Text>
+        <Text style={styles.text}>Type: {card.type}</Text>
+        <Text style={styles.text}>£{card.value}</Text>
+        <Text style={styles.text}>#{card.number}</Text>
+        <Text style={styles.text}>Condition: {card.condition}</Text> 
+      </View>
     </View>
   );
 };
@@ -27,8 +30,8 @@ const styles = StyleSheet.create({
     width: '33%',
     height: 'auto',
     backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 8,
+    borderRadius: 4,
+    padding: 6,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -38,12 +41,16 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   image: {
-    width: 80,
-    height: 80,
+    width: '100%',
+    height: 140,
     borderRadius: 2,
     marginBottom: 8,
   },
+  cardData: {
+    paddingHorizontal: 12,
+  },
   text: {
+    marginBottom: 4,
     fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'center',

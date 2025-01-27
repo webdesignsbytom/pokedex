@@ -27,4 +27,6 @@ export interface Card {
   number: string | null;
   set: string | null;
   condition: CardCondition | null; 
+  value: string | null; 
+  type: string | null;
 }
