@@ -8,3 +8,4 @@
 6. Less vertical gap on all cards
 7. Fix value buttons
 8. Get value total
+9. Dropdown for all card sets
