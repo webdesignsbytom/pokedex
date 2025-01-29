@@ -41,7 +41,7 @@ function MyStack() {
         <Stack.Screen
           name='Home'
           component={HomeScreen}
-          options={{ title: 'My home' }}
+          options={{ title: 'Pokédex Home' }}
         />
         <Stack.Screen
           name='AddCard'
