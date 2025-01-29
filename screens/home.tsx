@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 // Components
 import GridContainer from '@/components/GridContainer';
@@ -10,6 +10,7 @@ import PokeballImage from '../assets/images/pokeball.png'
 
 function HomeScreen() {
   // const persistentPlantsStore = useCardsPersistentStore((state) => state);
+  useEffect(() => {}, [])
 
   return (
     <View style={styles.container}>
