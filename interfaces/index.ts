@@ -16,6 +16,15 @@ export interface Navigation {
   >;
 }
 
+export enum Currency {
+  GBP = '£',
+  USD = '$',
+}
+
+export interface User {
+  currency: Currency;
+}
+
 export enum CardCondition {
   Bad = 'Bad',
   Good = 'Good',
@@ -28,7 +37,7 @@ export interface Card {
   image: string;
   number: string | null;
   set: string | null;
-  condition: CardCondition | null; 
-  value: string | null; 
+  condition: CardCondition | null;
+  value: string | null;
   type: string | null;
 }

@@ -1,11 +1,32 @@
 import { View, Text, StyleSheet, Alert } from 'react-native';
-import React from 'react';
-// Theme
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { themeCommon } from '../../styles/theme';
 import BasicButton from '../../components/BasicButton';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Currency } from '../../interfaces';
 
 const SettingsScreen = () => {
+  const [open, setOpen] = useState(false); // State for DropDownPicker
+  const [currency, setCurrency] = useState<Currency | null>(null); // Selected currency
+
+  // Load user currency from AsyncStorage when the screen loads
+  useEffect(() => {
+    const loadCurrency = async () => {
+      try {
+        const storedCurrency = await AsyncStorage.getItem('currency');
+        if (storedCurrency) {
+          setCurrency(storedCurrency as Currency); // Set the loaded currency value
+        }
+      } catch (error) {
+        console.error('Failed to load currency:', error);
+      }
+    };
+
+    loadCurrency();
+  }, []);
+
+  // Reset AsyncStorage
   const handleResetStorage = async () => {
     Alert.alert(
       'Reset Storage',
@@ -19,12 +40,10 @@ const SettingsScreen = () => {
               await AsyncStorage.clear();
               console.log('Storage has been cleared successfully.');
               Alert.alert('Success', 'All data has been reset.');
+              setCurrency(null); // Reset currency after clearing storage
             } catch (error) {
               console.error('Error clearing storage:', error);
-              Alert.alert(
-                'Error',
-                'Failed to clear storage. Please try again.'
-              );
+              Alert.alert('Error', 'Failed to clear storage. Please try again.');
             }
           },
         },
@@ -34,11 +53,27 @@ const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text>SettingsScreen</Text>
+      <Text style={styles.text}>Settings</Text>
       <BasicButton
         command={handleResetStorage}
-        text='Clear Storage'
+        text="Clear Storage"
         color={themeCommon.primary}
+      />
+      <Text style={styles.text}>Currency:</Text>
+      <DropDownPicker
+        open={open}
+        value={currency} // Use selected currency
+        items={[
+          { label: 'GBP (£)', value: Currency.GBP },
+          { label: 'USD ($)', value: Currency.USD },
+        ]}
+        setOpen={setOpen}
+        // Directly set value and store in AsyncStorage
+        setValue={(value) => {
+          setCurrency(value); 
+        }}
+        containerStyle={styles.dropdownContainer}
+        style={styles.dropdown}
       />
     </View>
   );
@@ -52,11 +87,20 @@ const styles = StyleSheet.create({
     backgroundColor: themeCommon.mainBackground,
     maxHeight: '100%',
     overflow: 'hidden',
+    paddingVertical: 24,
+    paddingHorizontal: 16,
   },
   text: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#000',
+    marginBottom: 6,
+  },
+  dropdownContainer: {
+    marginBottom: 20,
+  },
+  dropdown: {
+    height: 40,
   },
 });

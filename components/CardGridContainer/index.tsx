@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   grid: {
-    gap: 18,
+    gap: 12,
     justifyContent: 'center',
   },
   errorText: {
