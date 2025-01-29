@@ -3,7 +3,7 @@ import "dotenv/config";
 module.exports = {
   name: "Pokedex",
   slug: "pokedex-app",
-  version: "1.0.0",
+  version: "1.2.0",
   privacy: "public",
   description: "My trading card pokedex.",
   orientation: "portrait",
