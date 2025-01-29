@@ -26,6 +26,12 @@ const SettingsScreen = () => {
     loadCurrency();
   }, []);
 
+  // Function to handle setting the currency and storing it in AsyncStorage
+  const setCurrencyHandler = async (currency: Currency) => {
+    await AsyncStorage.setItem('currency', currency); // Store the currency in AsyncStorage
+    setCurrency(currency); // Update state
+  };
+
   // Reset AsyncStorage
   const handleResetStorage = async () => {
     Alert.alert(
@@ -43,7 +49,10 @@ const SettingsScreen = () => {
               setCurrency(Currency.GBP); // Reset to GBP after clearing storage
             } catch (error) {
               console.error('Error clearing storage:', error);
-              Alert.alert('Error', 'Failed to clear storage. Please try again.');
+              Alert.alert(
+                'Error',
+                'Failed to clear storage. Please try again.'
+              );
             }
           },
         },
@@ -56,7 +65,7 @@ const SettingsScreen = () => {
       <Text style={styles.text}>Settings</Text>
       <BasicButton
         command={handleResetStorage}
-        text="Clear Storage"
+        text='Clear Storage'
         color={themeCommon.primary}
       />
       <Text style={styles.text}>Currency:</Text>
@@ -69,9 +78,7 @@ const SettingsScreen = () => {
         ]}
         setOpen={setOpen}
         // Directly set value and store in AsyncStorage
-        setValue={(value) => {
-          setCurrency(value); 
-        }}
+        setValue={(value) => setCurrencyHandler(value as unknown as Currency)} // Ensure value is treated as a Currency
         containerStyle={styles.dropdownContainer}
         style={styles.dropdown}
       />
