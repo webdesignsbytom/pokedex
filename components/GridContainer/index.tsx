@@ -1,13 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// Theme
-import { themeCommon } from '../../styles/theme';
+import { View, StyleSheet } from 'react-native';
 // Components
-import BasicButton from '../BasicButton';
 import SquareButton from '../Utils/squareButton';
 // Images
 import PokeballIcon from '../../assets/icons/pokeball-icon.png';
+import PokemonCardBack from '../../assets/images/pokemon-card-back.png';
 
 const GridContainer = () => {
   const links = [
@@ -20,36 +17,16 @@ const GridContainer = () => {
     {
       label: 'All Cards',
       routeName: 'AllCards',
+      imageSource: PokemonCardBack,
+      params: null,
+    },
+    {
+      label: 'Settings',
+      routeName: 'Settings',
       imageSource: PokeballIcon,
       params: null,
     },
   ];
-
-  const handleResetStorage = async () => {
-    Alert.alert(
-      'Reset Storage',
-      'Are you sure you want to reset all saved data? This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'OK',
-          onPress: async () => {
-            try {
-              await AsyncStorage.clear();
-              console.log('Storage has been cleared successfully.');
-              Alert.alert('Success', 'All data has been reset.');
-            } catch (error) {
-              console.error('Error clearing storage:', error);
-              Alert.alert(
-                'Error',
-                'Failed to clear storage. Please try again.'
-              );
-            }
-          },
-        },
-      ]
-    );
-  };
 
   return (
     <View style={styles.container}>
@@ -63,12 +40,6 @@ const GridContainer = () => {
             params={button.params}
           />
         ))}
-
-        <BasicButton
-          command={handleResetStorage}
-          text='Clear Storage'
-          color={themeCommon.primary}
-        />
       </View>
     </View>
   );

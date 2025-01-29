@@ -4,6 +4,8 @@ export type RootStackParamList = {
   Home: undefined;
   AddCard: undefined;
   AllCards: undefined;
+  EditCard: { card: Card };
+  Settings: undefined;
 };
 
 export interface Navigation {

@@ -1,13 +1,21 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native'; // Import the useNavigation hook
 // Interfaces
-import { Card } from '../../interfaces'; // Import the Card interface
+import { Card, RootStackParamList } from '../../interfaces'; // Import the Card interface
+// Components
+import BasicButton from '../BasicButton';
+import { themeCommon } from '../../styles/theme';
 
 interface SmallCardItemProps {
   card: Card;
 }
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'EditCard'>;
 
 const SmallCardItem: React.FC<SmallCardItemProps> = ({ card }) => {
+  const navigation = useNavigation<NavigationProp>(); // Correctly type the navigation prop
+
   return (
     <View key={card.number} style={styles.card}>
       <Image source={{ uri: card.image }} style={styles.image} />
@@ -17,7 +25,16 @@ const SmallCardItem: React.FC<SmallCardItemProps> = ({ card }) => {
         <Text style={styles.text}>Type: {card.type}</Text>
         <Text style={styles.text}>£{card.value}</Text>
         <Text style={styles.text}>#{card.number}</Text>
-        <Text style={styles.text}>Condition: {card.condition}</Text> 
+        <Text style={styles.text}>Condition: {card.condition}</Text>
+        <BasicButton
+          command={() =>
+            navigation.navigate('EditCard', {
+              card: card,
+            })
+          }
+          text='Edit Card'
+          color={themeCommon.primary}
+        />
       </View>
     </View>
   );

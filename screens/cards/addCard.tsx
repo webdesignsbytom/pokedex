@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Interfaces
@@ -8,7 +9,6 @@ import { Card, CardCondition } from '../../interfaces';
 import { themeCommon } from '../../styles/theme';
 // Components
 import BasicTextInput from '../../components/BasicTextInput';
-import DropDownPicker from 'react-native-dropdown-picker';
 import BasicButton from '../../components/BasicButton';
 
 const AddCard = () => {
@@ -18,7 +18,7 @@ const AddCard = () => {
   const [number, setNumber] = useState<string>(''); 
   const [value, setValue] = useState<string>(''); 
   const [type, setType] = useState<string>('');
-  const [condition, setCondition] = useState<CardCondition>(CardCondition.Good); 
+  const [condition, setCondition] = useState<CardCondition>(CardCondition.Excellent); 
   const [open, setOpen] = useState(false); 
 
   const [errors, setErrors] = useState('');
@@ -164,7 +164,7 @@ const AddCard = () => {
       />
 
       <BasicTextInput
-        value={value}
+        value={type}
         label='Card Type'
         onChangeText={setType}
         placeholder='Enter card type'
