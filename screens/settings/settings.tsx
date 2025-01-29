@@ -8,7 +8,7 @@ import { Currency } from '../../interfaces';
 
 const SettingsScreen = () => {
   const [open, setOpen] = useState(false); // State for DropDownPicker
-  const [currency, setCurrency] = useState<Currency | null>(null); // Selected currency
+  const [currency, setCurrency] = useState<Currency>(Currency.GBP); // Default currency is GBP
 
   // Load user currency from AsyncStorage when the screen loads
   useEffect(() => {
@@ -40,7 +40,7 @@ const SettingsScreen = () => {
               await AsyncStorage.clear();
               console.log('Storage has been cleared successfully.');
               Alert.alert('Success', 'All data has been reset.');
-              setCurrency(null); // Reset currency after clearing storage
+              setCurrency(Currency.GBP); // Reset to GBP after clearing storage
             } catch (error) {
               console.error('Error clearing storage:', error);
               Alert.alert('Error', 'Failed to clear storage. Please try again.');
