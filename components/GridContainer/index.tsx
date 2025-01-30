@@ -5,6 +5,9 @@ import SquareButton from '../Utils/squareButton';
 // Images
 import PokeballIcon from '../../assets/icons/pokeball-icon.png';
 import PokemonCardBack from '../../assets/images/pokemon-card-back.png';
+import Pokedex from '../../assets/images/pokedex.png';
+import SettingsIcon from '../../assets/images/settings.png';
+import CardPack from '../../assets/images/card-pack.png';
 
 const GridContainer = () => {
   const links = [
@@ -23,19 +26,19 @@ const GridContainer = () => {
     {
       label: 'Collection',
       routeName: 'Collection',
-      imageSource: PokemonCardBack,
+      imageSource: CardPack,
       params: undefined, // No params for Collection
     },
     {
       label: 'Card Data',
       routeName: 'CardData',
-      imageSource: PokemonCardBack,
+      imageSource: Pokedex,
       params: undefined, // No params for Collection
     },
     {
       label: 'Settings',
       routeName: 'Settings',
-      imageSource: PokeballIcon,
+      imageSource: SettingsIcon,
       params: undefined, // or any params you need for Settings
     },
   ];
