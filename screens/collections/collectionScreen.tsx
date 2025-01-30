@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  FlatList,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet } from 'react-native';
 // Store
 import { useCollectionStore } from '../../store';
-import BasicButton from '@/components/BasicButton';
-import { themeCommon } from '@/styles/theme';
+// Theme
+import { themeCommon } from '../../styles/theme';
+// Components
+import BasicButton from '../../components/BasicButton';
+import CollectionButton from '../../components/CollectionButton';
 
 const CollectionScreen = () => {
   const { collections, addCollection } = useCollectionStore();
@@ -24,11 +20,7 @@ const CollectionScreen = () => {
       <FlatList
         data={collections}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.collectionItem}>
-            <Text style={styles.collectionText}>{item.name}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => <CollectionButton item={item} />}
       />
 
       {/* Input for new collection */}

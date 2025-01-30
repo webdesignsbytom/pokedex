@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 // Components
 import SquareButton from '../Utils/squareButton';
 // Images
@@ -21,7 +21,7 @@ const GridContainer = () => {
       params: null,
     },
     {
-      label: 'Collection',
+      label: 'Collections',
       routeName: 'Collection',
       imageSource: PokemonCardBack,
       params: null,
@@ -37,15 +37,23 @@ const GridContainer = () => {
   return (
     <View style={styles.container}>
       <View style={styles.grid}>
-        {links.map((button, index) => (
-          <SquareButton
-            key={index}
-            label={button.label}
-            routeName={button.routeName} // Pass the routeName dynamically
-            imageSource={button.imageSource}
-            params={button.params}
-          />
-        ))}
+        <FlatList
+          data={links}
+          keyExtractor={(item, index) =>
+            item.label ? item.label.toString() : `fallback-${index}`
+          }
+          renderItem={({ item }) => (
+            <SquareButton
+              key={item.label}
+              label={item.label}
+              routeName={item.routeName} // Pass the routeName dynamically
+              imageSource={item.imageSource}
+              params={item.params}
+            />
+          )}
+          numColumns={3}
+          contentContainerStyle={styles.grid}
+        />
       </View>
     </View>
   );
@@ -57,11 +65,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 24,
+    paddingHorizontal: 12,
   },
   grid: {
-    flex: 3,
-    gap: 12,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    rowGap: 12,
+    columnGap: 12,
   },
 });

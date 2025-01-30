@@ -42,7 +42,9 @@ export default SquareButton;
 
 const styles = StyleSheet.create({
   pressableContainer: {
-    height: 150
+    height: 150,
+    width: '33%',
+    justifyContent: 'center',
   },
   button: {
     flex: 1,
@@ -53,6 +55,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#00000050',
+    marginHorizontal: 'auto',
     overflow: 'hidden', // Ensures the image respects the button's rounded corners
   },
   image: {
@@ -70,6 +73,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 6,
     padding: 2,
+    width: '80%',
+    marginHorizontal: 'auto',
     backgroundColor: '#00000050',
   },
 });

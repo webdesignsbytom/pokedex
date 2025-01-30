@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
+import { StyleSheet, FlatList, Text, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Components
 import SmallCardItem from '../SmallCardItem';
@@ -75,12 +75,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 24,
     paddingHorizontal: 16,
-    backgroundColor: '#ff0000',
   },
   grid: {
     gap: 12,
     justifyContent: 'center',
-    backgroundColor: '#00ff00',
     padding: 4
   },
   errorText: {
