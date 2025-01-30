@@ -18,6 +18,7 @@ interface ItemProps {
 const CollectionButton = ({ item }: ItemProps) => {
   const navigation = useNavigation<ScreenNavigationProp>();
   const params = item;
+  
   return (
     <View style={styles.collectionItem}>
       <Pressable
@@ -53,7 +54,8 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
     fontSize: 18,
-    color: '#333',
+    color: '#fff',
+    fontWeight: 'bold',
     alignItems: 'center',
     marginVertical: 'auto',
   },
@@ -62,11 +64,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#333',
     backgroundColor: '#fff',
-    borderWidth: 2, 
-    borderColor: '#333', 
-    borderRadius: 5, 
+    borderWidth: 2,
+    borderColor: '#333',
+    borderRadius: 5,
     paddingHorizontal: 10,
-    paddingVertical: 5, 
-    textAlign: 'center', 
+    paddingVertical: 5,
+    textAlign: 'center',
   },
 });

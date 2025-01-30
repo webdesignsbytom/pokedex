@@ -8,13 +8,15 @@ import {
   Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker'; // Import the DropDownPicker
 import { RouteProp } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // Interfaces
 import { RootStackParamList, Card, CardCondition } from '../../interfaces';
 // Themes
 import { themeCommon } from '../../styles/theme';
+// Store
+import { useCardStore } from '@/store/useCardStore';
 // Components
 import BasicTextInput from '../../components/BasicTextInput';
 import BasicButton from '../../components/BasicButton';
@@ -31,33 +33,37 @@ const EditCard = ({
 }) => {
   const { card } = route.params;
 
+  const { cards, loadCards, removeCard } = useCardStore(); // Use store methods
+
   const [editedCard, setEditedCard] = useState<Card>(card);
   const [open, setOpen] = useState(false); // State for DropDownPicker
-  const [condition, setCondition] = useState<CardCondition | null>(
-    card.condition
-  );
+  const [condition, setCondition] = useState<CardCondition | null>(card.condition);
 
   // Sync the condition value with the editedCard state
   useEffect(() => {
     setEditedCard((prevState) => ({ ...prevState, condition }));
   }, [condition]);
 
+  useEffect(() => {
+    loadCards(); // Load cards from AsyncStorage on component mount
+  }, [loadCards]);
+
   const handleSave = async () => {
     try {
-      // Retrieve stored cards from AsyncStorage
-      const storedCards = await AsyncStorage.getItem('userCards');
-      if (storedCards) {
-        const parsedCards = JSON.parse(storedCards);
+      // Update the card in the store (no need for AsyncStorage directly here)
+      const cardExists = cards.find((item) => item.id === editedCard.id);
 
-        // Update the edited card in the list
-        const updatedCards = parsedCards.map((item: Card) =>
-          item.number === editedCard.number ? editedCard : item
+      if (cardExists) {
+        // Update the card
+        const updatedCards = cards.map((item) =>
+          item.id === editedCard.id ? editedCard : item
         );
-
+        // Update the store
         await AsyncStorage.setItem('userCards', JSON.stringify(updatedCards));
-
-        navigation.goBack();
+        // Reload the cards
+        loadCards();
       }
+      navigation.goBack();
     } catch (err) {
       console.error('Error saving card:', err);
     }
@@ -74,36 +80,13 @@ const EditCard = ({
           style: 'destructive',
           onPress: async () => {
             try {
-              // Retrieve stored cards from AsyncStorage
-              const storedCards = await AsyncStorage.getItem('userCards');
-              if (storedCards) {
-                const parsedCards = JSON.parse(storedCards);
-
-                // Filter out the card being deleted
-                const updatedCards = parsedCards.filter(
-                  (item: Card) => item.number !== editedCard.number
-                );
-
-                // Save the updated list to AsyncStorage
-                await AsyncStorage.setItem(
-                  'userCards',
-                  JSON.stringify(updatedCards)
-                );
-
-                Alert.alert(
-                  'Deleted',
-                  'The card has been successfully deleted.'
-                );
-
-                // Navigate back after deletion
-                navigation.goBack();
-              }
+              await removeCard(editedCard.id); // Remove the card from the store
+              loadCards(); // Reload the cards after deletion
+              Alert.alert('Deleted', 'The card has been successfully deleted.');
+              navigation.goBack();
             } catch (err) {
               console.error('Error deleting card:', err);
-              Alert.alert(
-                'Error',
-                'Failed to delete the card. Please try again.'
-              );
+              Alert.alert('Error', 'Failed to delete the card. Please try again.');
             }
           },
         },
@@ -148,48 +131,48 @@ const EditCard = ({
 
       <BasicButton
         command={handleEditPhoto}
-        text='Edit Image'
+        text="Edit Image"
         color={themeCommon.primary}
       />
-      
+
       <BasicTextInput
         value={editedCard.name}
-        label='Card Name:'
+        label="Card Name:"
         onChangeText={(text) => setEditedCard({ ...editedCard, name: text })}
-        placeholder='Card Name'
+        placeholder="Card Name"
       />
 
       <BasicNumberInput
         value={editedCard.number || null}
-        label='Card Number'
+        label="Card Number"
         onChangeText={(text) => setEditedCard({ ...editedCard, number: text })}
-        placeholder='Edit card number'
+        placeholder="Edit card number"
       />
 
       <TextInput
         style={styles.input}
         value={editedCard.set || ''}
         onChangeText={(text) => setEditedCard({ ...editedCard, set: text })}
-        placeholder='Card Set'
+        placeholder="Card Set"
       />
 
       <TextInput
         style={styles.input}
         value={editedCard.type || ''}
         onChangeText={(text) => setEditedCard({ ...editedCard, type: text })}
-        placeholder='Card Type'
+        placeholder="Card Type"
       />
 
       <BasicNumberInput
         value={editedCard.value || null}
-        label='Card Value'
+        label="Card Value"
         onChangeText={(text) => setEditedCard({ ...editedCard, value: text })}
-        placeholder='Edit card value'
+        placeholder="Edit card value"
       />
 
       {/* DropDownPicker for condition */}
       <Text style={styles.text}>Condition:</Text>
-      
+
       <DropDownPicker
         open={open}
         value={condition} // Match the enum type
@@ -207,13 +190,13 @@ const EditCard = ({
 
       <BasicButton
         command={handleSave}
-        text='Save Changes'
+        text="Save Changes"
         color={themeCommon.primary}
       />
 
       <BasicButton
         command={deleteCard}
-        text='Delete Card'
+        text="Delete Card"
         color={themeCommon.primary}
       />
     </ScrollView>

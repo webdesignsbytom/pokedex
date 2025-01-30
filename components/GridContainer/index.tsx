@@ -27,6 +27,12 @@ const GridContainer = () => {
       params: undefined, // No params for Collection
     },
     {
+      label: 'Card Data',
+      routeName: 'CardData',
+      imageSource: PokemonCardBack,
+      params: undefined, // No params for Collection
+    },
+    {
       label: 'Settings',
       routeName: 'Settings',
       imageSource: PokeballIcon,

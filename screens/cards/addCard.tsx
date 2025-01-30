@@ -3,12 +3,14 @@ import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 // Interfaces
 import { Card, CardCondition } from '../../interfaces';
 // Theme
 import { themeCommon } from '../../styles/theme';
 // Store
 import { useSetStore } from '../../store';
+import { useCardStore } from '@/store/useCardStore';
 // Components
 import BasicTextInput from '../../components/BasicTextInput';
 import BasicButton from '../../components/BasicButton';
@@ -18,6 +20,7 @@ import SetDropdown from '../../components/SetDropdown';
 
 const AddCard = () => {
   const { sets } = useSetStore();
+  const { addCard } = useCardStore();
 
   const [image, setImage] = useState<string>('');
   const [name, setName] = useState<string>('');
@@ -55,7 +58,6 @@ const AddCard = () => {
   };
 
   const handleSaveCard = async () => {
-    // Validate required fields
     if (!name.trim()) {
       alert('Please enter a card name.');
       return;
@@ -72,66 +74,34 @@ const AddCard = () => {
     }
 
     try {
-      // Create a new card object
       const newCard: Card = {
+        id: uuid.v4() as string,
         name: name.trim(),
         image,
-        number: number,
+        number,
         set: set.trim() || null,
         condition,
         value,
         type,
       };
 
-      // Retrieve existing cards from AsyncStorage
-      const storedCards = await AsyncStorage.getItem('userCards');
-      let cards: Card[] = [];
-
-      try {
-        cards = storedCards ? JSON.parse(storedCards) : [];
-        if (!Array.isArray(cards)) {
-          throw new Error('Invalid data format in AsyncStorage.');
-        }
-      } catch (error) {
-        console.warn('Error parsing stored userCards:', error);
-        cards = [];
-      }
-
-      // Add the new card
-      cards.push(newCard);
-
-      // Validate the data before saving
-      const serializedCards = JSON.stringify(cards);
-      if (!serializedCards) {
-        setErrors('Failed to serialize data.');
-        throw new Error('Failed to serialize cards data.');
-      }
-
-      // Save updated cards back to AsyncStorage
-      await AsyncStorage.setItem('userCards', serializedCards);
-
-      // Post-save validation: Ensure the data was saved successfully
-      const savedCards = await AsyncStorage.getItem('userCards');
-      if (savedCards !== serializedCards) {
-        throw new Error('Data mismatch: saved data does not match.');
-      }
+      await addCard(newCard); // ✅ Use Zustand store instead of AsyncStorage
 
       alert('Card saved successfully!');
 
-      // Clear the form after saving
+      // Clear the form
       setName('');
       setNumber(null);
       setImage('');
       setSet('');
       setValue(null);
       setType('');
-      setCondition(CardCondition.Good); // Reset condition to default
+      setCondition(CardCondition.Good);
     } catch (error) {
       console.error('Error saving card:', error);
       alert('An error occurred while saving the card. Please try again.');
     }
   };
-
 
   return (
     <ScrollView style={styles.container}>
@@ -153,7 +123,6 @@ const AddCard = () => {
           }}
         />
       )}
-
 
       {/* Button to trigger photo capture */}
       <BasicButton
@@ -196,19 +165,21 @@ const AddCard = () => {
         placeholder='Enter card type'
       />
 
-      <CurrencyInput
-        value={value}
-        onChangeValue={setValue}
-        prefix='£'
-        delimiter='.'
-        separator=','
-        precision={2}
-        minValue={0}
-        showPositiveSign
-        onChangeText={(formattedValue) => {
-          console.log(formattedValue);
-        }}
-      />
+      <View style={styles.valueContainer}>
+        <Text style={styles.valueLabel}>Value: £</Text>
+        <CurrencyInput
+          value={value}
+          onChangeValue={setValue}
+          delimiter='.'
+          separator=','
+          precision={2}
+          minValue={0}
+          style={styles.numInput}
+          onChangeText={(formattedValue) => {
+            console.log(formattedValue);
+          }}
+        />
+      </View>
 
       {/* Dropdown to select card condition */}
       <View>
@@ -250,7 +221,7 @@ const styles = StyleSheet.create({
   },
   dropContainer: {
     paddingTop: 4,
-    paddingBottom: 18,
+    paddingBottom: 6,
   },
   headerText: {
     textAlign: 'center',
@@ -258,9 +229,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  valueContainer: { 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    rowGap: 4,
+    paddingTop: 4,
+    paddingBottom: 8,
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  valueLabel: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
   label: {
     fontSize: 16,
-    fontWeight: '600',
-    marginTop: 16,
+    fontWeight: '700',
+  },
+  numInput: {
+    width: '100%',
+    maxWidth: 200,
+    borderWidth: 1,
+    borderColor: '#333',
+    borderRadius: 5,
   },
 });

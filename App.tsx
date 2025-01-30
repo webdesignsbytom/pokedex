@@ -15,6 +15,7 @@ import allCards from './screens/cards/allCards';
 import SettingsScreen from './screens/settings/settings';
 import EditCard from './screens/cards/editCard';
 import CollectionScreen from './screens/collections/collectionScreen';
+import CardData from './screens/data/cardData';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -63,6 +64,11 @@ function MyStack() {
           name='Collection'
           component={CollectionScreen}
           options={{ title: 'Collection' }}
+        />
+        <Stack.Screen
+          name='CardData'
+          component={CardData}
+          options={{ title: 'Card Data' }}
         />
         <Stack.Screen
           name='Settings'

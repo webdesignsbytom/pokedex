@@ -4,6 +4,7 @@ import { persist, PersistOptions } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // Interfaces
 import { Card, Collection } from '../interfaces';
+import { cardSeriesData } from '@/data/cardData';
 
 interface UserCardsState {
   userCards: Card[];
@@ -102,29 +103,34 @@ interface Set {
 
 let idx = 1;
 
-const defaultSets = [
-  { id: idx++, name: 'Base Set', cards: [] },
-  { id:  idx++, name: 'Edition 2', cards: [] },
-  { id:  idx++, name: 'Shining Legends', cards: [] },
-  { id:  idx++, name: 'Hidden Fates', cards: [] },
-  { id:  idx++, name: 'XY Evolutions', cards: [] },
-  { id:  idx++, name: 'Vivid Voltage', cards: [] },
-];
+const getSeriesNames = () => {
+  return cardSeriesData.flatMap((series) => 
+    series.expansions.map((expansion) => expansion.name)
+  );
+};
+
+const seriesNames = getSeriesNames();
+
+const defaultSets = seriesNames.map((name) => ({
+  id: (idx++).toString(),
+  name,
+  cards: [],
+}));
 
 interface SetStore {
-  sets: { id: number; name: string; cards: any[] }[]; // Array of sets with id, name, and cards
+  sets: { id: string; name: string; cards: any[] }[]; // Array of sets with id, name, and cards
   addSet: (name: string) => void; // Adds a new set to the list
 }
 
 export const useSetStore = create<SetStore>((set) => ({
-  sets: defaultSets, // Use default sets here
+  sets: defaultSets, // Use the dynamically generated sets here
 
   // Add a new set to the list with an auto-generated ID and an empty cards array
   addSet: (name) =>
     set((state) => ({
       sets: [
         ...state.sets,
-        { id: idx++, name, cards: [] }, // Create a new set with the name and an empty cards array
+        { id: (idx++).toString(), name, cards: [] }, // Create a new set with the name and an empty cards array
       ],
     })),
 }));
