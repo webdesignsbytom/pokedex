@@ -19,7 +19,6 @@ import { themeCommon } from '../../styles/theme';
 import BasicTextInput from '../../components/BasicTextInput';
 import BasicButton from '../../components/BasicButton';
 import BasicNumberInput from '../../components/BasicNumberInput';
-import CollectionCheckboxArray from '../../components/CollectionCheckboxArray';
 
 type EditCardRouteProp = RouteProp<RootStackParamList, 'EditCard'>;
 
@@ -190,6 +189,7 @@ const EditCard = ({
 
       {/* DropDownPicker for condition */}
       <Text style={styles.text}>Condition:</Text>
+      
       <DropDownPicker
         open={open}
         value={condition} // Match the enum type

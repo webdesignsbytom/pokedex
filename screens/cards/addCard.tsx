@@ -133,7 +133,6 @@ const AddCard = () => {
   };
 
 
-
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.headerText}>Add New Card</Text>

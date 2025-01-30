@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import GridContainer from '@/components/GridContainer';
 import { themeCommon } from '@/styles/theme';
 // Utils
-import { calculateTotalValue } from '@/utils/calculateTotalValue';
+import { calculateTotalValue } from '../utils/calculateTotalValue';
 // Images
 import PokeballImage from '../assets/images/pokeball.png';
 

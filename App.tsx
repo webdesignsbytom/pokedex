@@ -14,7 +14,6 @@ import AddCard from './screens/cards/addCard';
 import allCards from './screens/cards/allCards';
 import SettingsScreen from './screens/settings/settings';
 import EditCard from './screens/cards/editCard';
-import CollectionScreen from './screens/collections/collectionScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -59,11 +58,11 @@ function MyStack() {
           component={EditCard}
           options={{ title: 'Edit Cards' }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name='Collection'
           component={CollectionScreen}
           options={{ title: 'Collections' }}
-        />
+        /> */}
         <Stack.Screen
           name='Settings'
           component={SettingsScreen}
