@@ -1,12 +1,13 @@
 import { View, Text, Image, StyleSheet, Button } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { useNavigation } from '@react-navigation/native'; // Import the useNavigation hook
+import { useNavigation } from '@react-navigation/native'; 
 // Interfaces
-import { Card, RootStackParamList } from '../../interfaces'; // Import the Card interface
+import { Card, RootStackParamList } from '../../interfaces'; 
+// Theme
+import { themeCommon } from '../../styles/theme';
 // Components
 import BasicButton from '../BasicButton';
-import { themeCommon } from '../../styles/theme';
 
 interface SmallCardItemProps {
   card: Card;
@@ -14,7 +15,7 @@ interface SmallCardItemProps {
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'EditCard'>;
 
 const SmallCardItem: React.FC<SmallCardItemProps> = ({ card }) => {
-  const navigation = useNavigation<NavigationProp>(); // Correctly type the navigation prop
+  const navigation = useNavigation<NavigationProp>(); 
 
   return (
     <View key={card.number} style={styles.card}>

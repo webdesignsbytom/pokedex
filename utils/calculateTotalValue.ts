@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// Interfaces
 import { Card } from '../interfaces';
 
 export const calculateTotalValue = async (): Promise<number> => {

@@ -1,25 +1,25 @@
+import React, { useState, useEffect } from 'react';
 import {
-  View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Image,
   ScrollView,
   Alert,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker'; // Import the DropDownPicker
-// Interfaces
 import { RouteProp } from '@react-navigation/native';
+// Interfaces
 import { RootStackParamList, Card, CardCondition } from '../../interfaces';
+// Themes
+import { themeCommon } from '../../styles/theme';
+// Components
 import BasicTextInput from '../../components/BasicTextInput';
 import BasicButton from '../../components/BasicButton';
-import { themeCommon } from '../../styles/theme';
-import BasicNumberInput from '@/components/BasicNumberInput';
-import * as ImagePicker from 'expo-image-picker';
-import CollectionCheckboxArray from '@/components/CollectionCheckboxArray';
+import BasicNumberInput from '../../components/BasicNumberInput';
+import CollectionCheckboxArray from '../../components/CollectionCheckboxArray';
 
 type EditCardRouteProp = RouteProp<RootStackParamList, 'EditCard'>;
 
@@ -36,7 +36,7 @@ const EditCard = ({
   const [open, setOpen] = useState(false); // State for DropDownPicker
   const [condition, setCondition] = useState<CardCondition | null>(
     card.condition
-  ); // Selected condition
+  );
 
   // Sync the condition value with the editedCard state
   useEffect(() => {
@@ -55,10 +55,8 @@ const EditCard = ({
           item.number === editedCard.number ? editedCard : item
         );
 
-        // Save updated list to AsyncStorage
         await AsyncStorage.setItem('userCards', JSON.stringify(updatedCards));
 
-        // Navigate back
         navigation.goBack();
       }
     } catch (err) {
