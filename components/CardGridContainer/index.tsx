@@ -75,11 +75,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 24,
     paddingHorizontal: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#ff0000',
   },
   grid: {
     gap: 12,
     justifyContent: 'center',
+    backgroundColor: '#00ff00',
+    padding: 4
   },
   errorText: {
     color: 'red',

@@ -20,7 +20,7 @@ const SmallCardItem: React.FC<SmallCardItemProps> = ({ card }) => {
     <View key={card.number} style={styles.card}>
       <Image source={{ uri: card.image }} style={styles.image} />
       <View style={styles.cardData}>
-        <Text style={styles.text}>{card.name}</Text>
+        <Text style={styles.nameText}>{card.name}</Text>
         <Text style={styles.text}>Set: {card.set}</Text>
         <Text style={styles.text}>Type: {card.type}</Text>
         <Text style={styles.text}>£{card.value}</Text>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     backgroundColor: '#fff',
     borderRadius: 4,
-    padding: 6,
+    padding: 2,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 4,
-    marginHorizontal: 2
+    marginVertical: 4,
+    marginRight: 4
   },
   image: {
     width: '100%',
@@ -65,12 +66,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   cardData: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
+    width: '100%',
   },
-  text: {
+  nameText: {
     marginBottom: 4,
     fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  text: {
+    marginBottom: 4,
+    fontSize: 12,
+    fontWeight: '500',
+    textAlign: 'left',
   },
 });
