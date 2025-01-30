@@ -75,7 +75,11 @@ const CollectionCheckboxArray: React.FC<CollectionCheckboxArrayProps> = ({
             onChangeText={setNewCollectionName}
             placeholder='Enter collection name'
           />
-          <Button title='Confirm' onPress={handleCreateNewCollection} />
+          <BasicButton
+            command={handleCreateNewCollection}
+            text='Confirm'
+            color={themeCommon.primary}
+          />
         </View>
       )}
     </View>

@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
 // Store
 import { useCollectionStore } from '../../store';
+import BasicButton from '@/components/BasicButton';
+import { themeCommon } from '@/styles/theme';
 
 const CollectionScreen = () => {
   const { collections, addCollection } = useCollectionStore();
@@ -10,7 +19,7 @@ const CollectionScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Collections</Text>
-      
+
       {/* Displaying the collections */}
       <FlatList
         data={collections}
@@ -25,20 +34,21 @@ const CollectionScreen = () => {
       {/* Input for new collection */}
       <TextInput
         style={styles.input}
-        placeholder="New Collection Name"
+        placeholder='New Collection Name'
         value={newCollection}
         onChangeText={setNewCollection}
       />
 
       {/* Add collection button */}
-      <Button
-        title="Add Collection"
-        onPress={() => {
+      <BasicButton
+        command={() => {
           if (newCollection.trim()) {
             addCollection(newCollection);
             setNewCollection('');
           }
         }}
+        text='Add New Collection'
+        color={themeCommon.primary}
       />
     </View>
   );
