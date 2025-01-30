@@ -17,11 +17,13 @@ const CollectionScreen = () => {
       <Text style={styles.title}>Collections</Text>
 
       {/* Displaying the collections */}
-      <FlatList
-        data={collections}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <CollectionButton item={item} />}
-      />
+      {collections.length > 0 && (
+        <FlatList
+          data={collections}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <CollectionButton item={item} />}
+        />
+      )}
 
       {/* Input for new collection */}
       <TextInput

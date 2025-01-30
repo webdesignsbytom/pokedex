@@ -12,27 +12,28 @@ const GridContainer = () => {
       label: 'Add Card',
       routeName: 'AddCard',
       imageSource: PokeballIcon,
-      params: null,
+      params: undefined, // or any params you need for AddCard
     },
     {
       label: 'All Cards',
       routeName: 'AllCards',
       imageSource: PokemonCardBack,
-      params: null,
+      params: undefined, // or any params you need for AllCards
     },
     {
-      label: 'Collections',
+      label: 'Collection',
       routeName: 'Collection',
       imageSource: PokemonCardBack,
-      params: null,
+      params: undefined, // No params for Collection
     },
     {
       label: 'Settings',
       routeName: 'Settings',
       imageSource: PokeballIcon,
-      params: null,
+      params: undefined, // or any params you need for Settings
     },
   ];
+  
 
   return (
     <View style={styles.container}>

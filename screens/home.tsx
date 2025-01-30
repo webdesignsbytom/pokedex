@@ -34,7 +34,7 @@ function HomeScreen() {
         <View style={styles.totalContainer}>
           <Text style={styles.totalText}>
             Total Value: £{Number(totalValue || 0).toFixed(2)}
-          </Text>{' '}
+          </Text>
         </View>
       </ImageBackground>
     </View>

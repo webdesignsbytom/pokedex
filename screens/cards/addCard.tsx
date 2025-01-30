@@ -206,7 +206,7 @@ const AddCard = () => {
         minValue={0}
         showPositiveSign
         onChangeText={(formattedValue) => {
-          console.log(formattedValue); // R$ +2.310,46
+          console.log(formattedValue);
         }}
       />
 
