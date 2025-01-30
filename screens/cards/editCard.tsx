@@ -139,8 +139,8 @@ const EditCard = ({
         <Image
           source={{ uri: editedCard.image }}
           style={{
-            width: 200,
-            height: 150,
+            width: 150,
+            height: 200,
             marginTop: 20,
             marginHorizontal: 'auto',
           }}
