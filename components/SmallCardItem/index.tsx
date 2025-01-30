@@ -32,7 +32,7 @@ const SmallCardItem: React.FC<SmallCardItemProps> = ({ card }) => {
               card: card,
             })
           }
-          text='Edit Card'
+          text='Edit'
           color={themeCommon.primary}
         />
       </View>

@@ -1,4 +1,13 @@
-import { View, Text, TextInput, Button, StyleSheet, Image, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker'; // Import the DropDownPicker
@@ -8,6 +17,9 @@ import { RootStackParamList, Card, CardCondition } from '../../interfaces';
 import BasicTextInput from '../../components/BasicTextInput';
 import BasicButton from '../../components/BasicButton';
 import { themeCommon } from '../../styles/theme';
+import BasicNumberInput from '@/components/BasicNumberInput';
+import * as ImagePicker from 'expo-image-picker';
+import CollectionCheckboxArray from '@/components/CollectionCheckboxArray';
 
 type EditCardRouteProp = RouteProp<RootStackParamList, 'EditCard'>;
 
@@ -54,6 +66,73 @@ const EditCard = ({
     }
   };
 
+  const deleteCard = async () => {
+    Alert.alert(
+      'Delete Card',
+      'Are you sure you want to delete this card? This action cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              // Retrieve stored cards from AsyncStorage
+              const storedCards = await AsyncStorage.getItem('userCards');
+              if (storedCards) {
+                const parsedCards = JSON.parse(storedCards);
+
+                // Filter out the card being deleted
+                const updatedCards = parsedCards.filter(
+                  (item: Card) => item.number !== editedCard.number
+                );
+
+                // Save the updated list to AsyncStorage
+                await AsyncStorage.setItem(
+                  'userCards',
+                  JSON.stringify(updatedCards)
+                );
+
+                Alert.alert(
+                  'Deleted',
+                  'The card has been successfully deleted.'
+                );
+
+                // Navigate back after deletion
+                navigation.goBack();
+              }
+            } catch (err) {
+              console.error('Error deleting card:', err);
+              Alert.alert(
+                'Error',
+                'Failed to delete the card. Please try again.'
+              );
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleEditPhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (status !== 'granted') {
+      alert('Camera permissions are required to edit the image.');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [3, 4],
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setEditedCard({ ...editedCard, image: result.assets[0].uri });
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Edit Card</Text>
@@ -70,12 +149,25 @@ const EditCard = ({
         />
       )}
 
+      <BasicButton
+        command={handleEditPhoto}
+        text='Edit Image'
+        color={themeCommon.primary}
+      />
+      
       <BasicTextInput
         value={editedCard.name}
         label='Card Name:'
         onChangeText={(text) => setEditedCard({ ...editedCard, name: text })}
         placeholder='Card Name'
-      />  
+      />
+
+      <BasicNumberInput
+        value={editedCard.number || null}
+        label='Card Number'
+        onChangeText={(text) => setEditedCard({ ...editedCard, number: text })}
+        placeholder='Edit card number'
+      />
 
       <TextInput
         style={styles.input}
@@ -83,17 +175,19 @@ const EditCard = ({
         onChangeText={(text) => setEditedCard({ ...editedCard, set: text })}
         placeholder='Card Set'
       />
+
       <TextInput
         style={styles.input}
         value={editedCard.type || ''}
         onChangeText={(text) => setEditedCard({ ...editedCard, type: text })}
         placeholder='Card Type'
       />
-      <TextInput
-        style={styles.input}
-        value={editedCard.value || ''}
+
+      <BasicNumberInput
+        value={editedCard.value || null}
+        label='Card Value'
         onChangeText={(text) => setEditedCard({ ...editedCard, value: text })}
-        placeholder='Card Value'
+        placeholder='Edit card value'
       />
 
       {/* DropDownPicker for condition */}
@@ -113,7 +207,17 @@ const EditCard = ({
         style={styles.dropdown}
       />
 
-      <BasicButton command={handleSave} text="Save Changes" color={themeCommon.primary} />
+      <BasicButton
+        command={handleSave}
+        text='Save Changes'
+        color={themeCommon.primary}
+      />
+
+      <BasicButton
+        command={deleteCard}
+        text='Delete Card'
+        color={themeCommon.primary}
+      />
     </ScrollView>
   );
 };

@@ -3,7 +3,7 @@ import { Appearance } from "react-native";
 import { persist, PersistOptions } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // Interfaces
-import { Card } from '@/interfaces';
+import { Card, Collection } from '../interfaces';
 
 interface UserCardsState {
   userCards: Card[];
@@ -67,3 +67,31 @@ export const useAppConfigStore = {
     setIsClosedUpdateModal: (value) => set({ isClosedUpdateModal: value }),
   })),
 };
+
+interface CollectionStore {
+  collections: Collection[];
+  addCollection: (name: string) => void; // Only adds the name and generates an id
+  addCardToCollection: (card: Card, collectionId: string) => void; // Adds card to a collection
+}
+
+export const useCollectionStore = create<CollectionStore>((set) => ({
+  collections: [],
+
+  // Add collection with just a name and generate an ID
+  addCollection: (name) =>
+    set((state) => ({
+      collections: [...state.collections, { id: Date.now().toString(), name, cards: [] }],
+    })),
+
+  // Add card to the specific collection
+  addCardToCollection: (card, collectionId) =>
+    set((state) => ({
+      collections: state.collections.map((collection) =>
+        collection.id === collectionId
+          ? { ...collection, cards: [...collection.cards, card] }
+          : collection
+      ),
+    })),
+}));
+
+// addCardToCollection(card, collectionId); // Add a card to an existing collection

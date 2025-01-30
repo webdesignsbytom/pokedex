@@ -21,6 +21,12 @@ const GridContainer = () => {
       params: null,
     },
     {
+      label: 'Collection',
+      routeName: 'Collection',
+      imageSource: PokemonCardBack,
+      params: null,
+    },
+    {
       label: 'Settings',
       routeName: 'Settings',
       imageSource: PokeballIcon,
@@ -54,7 +60,7 @@ const styles = StyleSheet.create({
   },
   grid: {
     flex: 3,
-    gap: 18,
+    gap: 12,
     flexDirection: 'row',
     justifyContent: 'center',
   },

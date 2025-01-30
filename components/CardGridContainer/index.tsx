@@ -29,7 +29,7 @@ const CardGridContainer = () => {
               card &&
               typeof card.name === 'string' &&
               typeof card.image === 'string' &&
-              (typeof card.number === 'string' || card.number === null) &&
+              (typeof card.number === 'number' || card.number === null) &&
               (typeof card.set === 'string' || card.set === null) &&
               typeof card.condition === 'string'
             );

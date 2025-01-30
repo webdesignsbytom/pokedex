@@ -6,6 +6,7 @@ export type RootStackParamList = {
   AllCards: undefined;
   EditCard: { card: Card };
   Settings: undefined;
+  Collection: undefined;
 };
 
 export interface Navigation {
@@ -35,9 +36,15 @@ export enum CardCondition {
 export interface Card {
   name: string;
   image: string;
-  number: string | null;
+  number: number | null;
   set: string | null;
   condition: CardCondition | null;
-  value: string | null;
+  value: number | null;
   type: string | null;
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  cards: Card[];
 }
