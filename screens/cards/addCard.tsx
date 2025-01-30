@@ -7,14 +7,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Card, CardCondition } from '../../interfaces';
 // Theme
 import { themeCommon } from '../../styles/theme';
+// Store
+import { useSetStore } from '../../store';
 // Components
 import BasicTextInput from '../../components/BasicTextInput';
 import BasicButton from '../../components/BasicButton';
 import BasicNumberInput from '../../components/BasicNumberInput';
 import CurrencyInput from 'react-native-currency-input';
-import CollectionCheckboxArray from '../../components/CollectionCheckboxArray';
+import SetDropdown from '../../components/SetDropdown';
 
 const AddCard = () => {
+  const { sets } = useSetStore();
+
   const [image, setImage] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [set, setSet] = useState<string>('');
@@ -24,9 +28,9 @@ const AddCard = () => {
   const [condition, setCondition] = useState<CardCondition>(
     CardCondition.Excellent
   );
-  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
 
-  const [open, setOpen] = useState(false);
+  const [conditionOpen, setConditionOpen] = useState(false);
+  const [setsOpen, setSetsOpen] = useState(false);
 
   const [errors, setErrors] = useState('');
 
@@ -128,9 +132,7 @@ const AddCard = () => {
     }
   };
 
-  const handleSelectionChange = (newSelections: string[]) => {
-    setSelectedCollections(newSelections);
-  };
+
 
   return (
     <ScrollView style={styles.container}>
@@ -153,7 +155,6 @@ const AddCard = () => {
         />
       )}
 
-      <CollectionCheckboxArray onSelectionChange={handleSelectionChange} />
 
       {/* Button to trigger photo capture */}
       <BasicButton
@@ -178,12 +179,16 @@ const AddCard = () => {
         placeholder='Enter card number'
       />
 
-      <BasicTextInput
-        value={set}
-        label='Card Set'
-        onChangeText={setSet}
-        placeholder='Enter card set'
-      />
+      {/* DropDownPicker for Card Set */}
+      <View style={styles.dropContainer}>
+        <SetDropdown
+          sets={sets}
+          set={set}
+          setSet={setSet}
+          open={setsOpen}
+          setOpen={setSetsOpen}
+        />
+      </View>
 
       <BasicTextInput
         value={type}
@@ -195,7 +200,7 @@ const AddCard = () => {
       <CurrencyInput
         value={value}
         onChangeValue={setValue}
-        prefix='R$'
+        prefix='£'
         delimiter='.'
         separator=','
         precision={2}
@@ -213,7 +218,7 @@ const AddCard = () => {
 
       <View style={styles.dropContainer}>
         <DropDownPicker
-          open={open}
+          open={conditionOpen}
           value={condition} // Match the enum type
           items={[
             { label: 'Bad', value: CardCondition.Bad },
@@ -221,7 +226,7 @@ const AddCard = () => {
             { label: 'Excellent', value: CardCondition.Excellent },
             { label: 'Mint', value: CardCondition.Mint },
           ]}
-          setOpen={setOpen}
+          setOpen={setConditionOpen}
           setValue={setCondition}
         />
       </View>

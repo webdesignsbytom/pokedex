@@ -7,6 +7,7 @@ import { useCollectionStore } from '../../store';
 import { themeCommon } from '../../styles/theme';
 // Components
 import BasicButton from '../BasicButton';
+import SmallButton from '../SmallButton';
 
 interface CollectionCheckboxArrayProps {
   onSelectionChange?: (selectedCollections: string[]) => void;
@@ -60,9 +61,9 @@ const CollectionCheckboxArray: React.FC<CollectionCheckboxArrayProps> = ({
       ))} */}
 
       {/* Button to create a new collection */}
-      <BasicButton
-        command={() => setIsCreating(true)}
-        text='+ Collection'
+      <SmallButton
+        command={handleCreateNewCollection}
+        text='+'
         color={themeCommon.primary}
       />
 
@@ -88,7 +89,11 @@ const CollectionCheckboxArray: React.FC<CollectionCheckboxArrayProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    flexDirection: 'row',
     padding: 20,
+    alignItems: 'center',
+    justifyContent: 'space-between',
     position: 'relative', // Allows for the input container to be positioned over the screen
   },
   title: {

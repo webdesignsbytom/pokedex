@@ -12,6 +12,7 @@ import BasicButton from '../BasicButton';
 interface SmallCardItemProps {
   card: Card;
 }
+
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'EditCard'>;
 
 const SmallCardItem: React.FC<SmallCardItemProps> = ({ card }) => {

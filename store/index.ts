@@ -95,3 +95,36 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
 }));
 
 // addCardToCollection(card, collectionId); // Add a card to an existing collection
+interface Set {
+  id: string;
+  name: string; 
+}
+
+let idx = 1;
+
+const defaultSets = [
+  { id: idx++, name: 'Base Set', cards: [] },
+  { id:  idx++, name: 'Edition 2', cards: [] },
+  { id:  idx++, name: 'Shining Legends', cards: [] },
+  { id:  idx++, name: 'Hidden Fates', cards: [] },
+  { id:  idx++, name: 'XY Evolutions', cards: [] },
+  { id:  idx++, name: 'Vivid Voltage', cards: [] },
+];
+
+interface SetStore {
+  sets: { id: number; name: string; cards: any[] }[]; // Array of sets with id, name, and cards
+  addSet: (name: string) => void; // Adds a new set to the list
+}
+
+export const useSetStore = create<SetStore>((set) => ({
+  sets: defaultSets, // Use default sets here
+
+  // Add a new set to the list with an auto-generated ID and an empty cards array
+  addSet: (name) =>
+    set((state) => ({
+      sets: [
+        ...state.sets,
+        { id: idx++, name, cards: [] }, // Create a new set with the name and an empty cards array
+      ],
+    })),
+}));
