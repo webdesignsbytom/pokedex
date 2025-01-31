@@ -19,3 +19,4 @@
 17. slightly less padding on all cards 
 18. 1st edition checkbox
 19. collection page
+20. List of card types 
