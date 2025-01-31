@@ -20,3 +20,4 @@
 18. 1st edition checkbox
 19. collection page
 20. List of card types 
+21. Backup system 
