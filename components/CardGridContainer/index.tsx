@@ -36,8 +36,9 @@ export default CardGridContainer;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 24,
-    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 24,
+    paddingHorizontal: 12,
   },
   grid: {
     gap: 12,

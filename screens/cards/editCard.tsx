@@ -12,7 +12,13 @@ import DropDownPicker from 'react-native-dropdown-picker'; // Import the DropDow
 import { RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Interfaces
-import { RootStackParamList, Card, CardCondition } from '../../interfaces';
+import {
+  RootStackParamList,
+  Card,
+  CardCondition,
+  cardTypeArray,
+  CardType,
+} from '../../interfaces';
 // Themes
 import { themeCommon } from '../../styles/theme';
 // Store
@@ -21,6 +27,7 @@ import { useCardStore } from '@/store/useCardStore';
 import BasicTextInput from '../../components/BasicTextInput';
 import BasicButton from '../../components/BasicButton';
 import BasicNumberInput from '../../components/BasicNumberInput';
+import DropDownMenu from '@/components/DropDownMenu';
 
 type EditCardRouteProp = RouteProp<RootStackParamList, 'EditCard'>;
 
@@ -36,8 +43,11 @@ const EditCard = ({
   const { cards, loadCards, removeCard } = useCardStore(); // Use store methods
 
   const [editedCard, setEditedCard] = useState<Card>(card);
+  const [selectedType, setSelectedType] = useState<CardType>(card.type ?? CardType.Null); // Fallback if type is null
   const [open, setOpen] = useState(false); // State for DropDownPicker
-  const [condition, setCondition] = useState<CardCondition | null>(card.condition);
+  const [condition, setCondition] = useState<CardCondition | null>(
+    card.condition
+  );
 
   // Sync the condition value with the editedCard state
   useEffect(() => {
@@ -50,17 +60,15 @@ const EditCard = ({
 
   const handleSave = async () => {
     try {
-      // Update the card in the store (no need for AsyncStorage directly here)
-      const cardExists = cards.find((item) => item.id === editedCard.id);
+      // Update the card with the selected type
+      const updatedCard = { ...editedCard, type: selectedType };
+      const cardExists = cards.find((item) => item.id === updatedCard.id);
 
       if (cardExists) {
-        // Update the card
         const updatedCards = cards.map((item) =>
-          item.id === editedCard.id ? editedCard : item
+          item.id === updatedCard.id ? updatedCard : item
         );
-        // Update the store
         await AsyncStorage.setItem('userCards', JSON.stringify(updatedCards));
-        // Reload the cards
         loadCards();
       }
       navigation.goBack();
@@ -86,7 +94,10 @@ const EditCard = ({
               navigation.goBack();
             } catch (err) {
               console.error('Error deleting card:', err);
-              Alert.alert('Error', 'Failed to delete the card. Please try again.');
+              Alert.alert(
+                'Error',
+                'Failed to delete the card. Please try again.'
+              );
             }
           },
         },
@@ -115,8 +126,6 @@ const EditCard = ({
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Edit Card</Text>
-
       {editedCard.image && (
         <Image
           source={{ uri: editedCard.image }}
@@ -131,43 +140,43 @@ const EditCard = ({
 
       <BasicButton
         command={handleEditPhoto}
-        text="Edit Image"
+        text='Edit Image'
         color={themeCommon.primary}
       />
 
       <BasicTextInput
         value={editedCard.name}
-        label="Card Name:"
+        label='Card Name:'
         onChangeText={(text) => setEditedCard({ ...editedCard, name: text })}
-        placeholder="Card Name"
+        placeholder='Card Name'
       />
 
       <BasicNumberInput
         value={editedCard.number || null}
-        label="Card Number"
+        label='Card Number'
         onChangeText={(text) => setEditedCard({ ...editedCard, number: text })}
-        placeholder="Edit card number"
+        placeholder='Edit card number'
       />
 
       <TextInput
         style={styles.input}
         value={editedCard.set || ''}
         onChangeText={(text) => setEditedCard({ ...editedCard, set: text })}
-        placeholder="Card Set"
+        placeholder='Card Set'
       />
 
-      <TextInput
-        style={styles.input}
-        value={editedCard.type || ''}
-        onChangeText={(text) => setEditedCard({ ...editedCard, type: text })}
-        placeholder="Card Type"
+<DropDownMenu
+        title='Card Type'
+        data={cardTypeArray}
+        setSelected={setSelectedType} // Set local state here
+        placeholder='Card Type'
       />
 
       <BasicNumberInput
         value={editedCard.value || null}
-        label="Card Value"
+        label='Card Value'
         onChangeText={(text) => setEditedCard({ ...editedCard, value: text })}
-        placeholder="Edit card value"
+        placeholder='Edit card value'
       />
 
       {/* DropDownPicker for condition */}
@@ -190,13 +199,13 @@ const EditCard = ({
 
       <BasicButton
         command={handleSave}
-        text="Save Changes"
+        text='Save Changes'
         color={themeCommon.primary}
       />
 
       <BasicButton
         command={deleteCard}
-        text="Delete Card"
+        text='Delete Card'
         color={themeCommon.primary}
       />
     </ScrollView>
@@ -206,11 +215,6 @@ const EditCard = ({
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-  },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
   },
   input: {
     height: 40,
