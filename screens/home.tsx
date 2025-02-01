@@ -27,7 +27,7 @@ function HomeScreen() {
         resizeMode='cover'
         style={styles.image}
       >
-        <Text style={styles.text}>Pokedex Folders</Text>
+        <Text style={styles.headerText}>Pokedex</Text>
         <GridContainer />
 
         {/* Display Total Value */}
@@ -55,11 +55,12 @@ const styles = StyleSheet.create({
     padding: 6,
     backgroundColor: '#00000050',
   },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  headerText: {
+    fontSize: 28,
+    fontWeight: '800',
     textAlign: 'center',
     color: '#fff',
+    marginTop: 10,
   },
   totalContainer: {
     marginTop: 20,
