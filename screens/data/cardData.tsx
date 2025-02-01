@@ -1,12 +1,21 @@
-import React, { useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { useSetStore } from '../../store';  // Your Zustand set store
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import { useSetStore } from '../../store'; // Your Zustand set store
 import { CardCondition } from '../../interfaces';
 import { useCardStore } from '@/store/useCardStore';
+import { capitalizeWords } from '@/utils';
 
 const CardData = () => {
   const { cards, loadCards } = useCardStore();
   const { sets } = useSetStore();
+
+  const [showAllSets, setShowAllSets] = useState(false);
 
   // Load cards when the component is mounted
   useEffect(() => {
@@ -15,7 +24,6 @@ const CardData = () => {
 
   // Count how many cards belong to each set, ensuring all sets are listed
   const cardCountBySet = sets.reduce((acc, set) => {
-    // Count cards that belong to this set
     const count = cards.filter((card) => card.set === set.name).length;
     acc[set.name] = count;
     return acc;
@@ -29,6 +37,9 @@ const CardData = () => {
     return acc;
   }, {} as Record<CardCondition, number>);
 
+  // Decide which sets to show
+  const displayedSets = showAllSets ? sets : sets.slice(0, 6);
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.headerText}>Card Statistics</Text>
@@ -36,11 +47,19 @@ const CardData = () => {
       {/* Cards by Set */}
       <View style={styles.section}>
         <Text style={styles.subHeaderText}>Cards by Set</Text>
-        {sets.map((set) => (
+        {displayedSets.map((set) => (
           <Text key={set.id} style={styles.statText}>
             {set.name}: {cardCountBySet[set.name] || 0} cards
           </Text>
         ))}
+
+        {sets.length > 6 && (
+          <TouchableOpacity onPress={() => setShowAllSets(!showAllSets)}>
+            <Text style={styles.showMoreText}>
+              {showAllSets ? 'Show Less' : 'Show More'}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Cards by Condition */}
@@ -61,12 +80,13 @@ const CardData = () => {
         ) : (
           cards.map((card) => (
             <View key={card.id} style={styles.cardItem}>
-              <Text style={styles.cardText}>{card.name}</Text>
+              <Text style={styles.cardNumber}>#{card.number}</Text>
+              <Text style={styles.cardText}>{capitalizeWords(card.name)}</Text>
               <Text style={styles.cardSubText}>
                 Set: {card.set || 'Unknown'}
               </Text>
               <Text style={styles.cardSubText}>
-                Condition: {card.condition}
+                {card.condition}
               </Text>
             </View>
           ))
@@ -103,6 +123,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   cardItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 12,
     borderWidth: 1,
     borderColor: '#ddd',
@@ -114,7 +136,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   cardSubText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
+  },
+  showMoreText: {
+    fontSize: 16,
+    color: '#007bff',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  cardNumber: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 // Interfaces
-import { Card, CardCondition } from '../../interfaces';
+import { Card, CardCondition, cardConditionArray, CardType, cardTypeArray } from '../../interfaces';
 // Theme
 import { themeCommon } from '../../styles/theme';
 // Store
@@ -17,6 +17,7 @@ import BasicButton from '../../components/BasicButton';
 import BasicNumberInput from '../../components/BasicNumberInput';
 import CurrencyInput from 'react-native-currency-input';
 import SetDropdown from '../../components/SetDropdown';
+import DropDownMenu from '@/components/DropDownMenu';
 
 const AddCard = () => {
   const { sets } = useSetStore();
@@ -27,7 +28,7 @@ const AddCard = () => {
   const [set, setSet] = useState<string>('');
   const [number, setNumber] = useState<number | null>(null);
   const [value, setValue] = useState<number | null>(null);
-  const [type, setType] = useState<string>('');
+  const [type, setType] = useState<CardType>(CardType.Null);
   const [condition, setCondition] = useState<CardCondition>(
     CardCondition.Excellent
   );
@@ -95,7 +96,7 @@ const AddCard = () => {
       setImage('');
       setSet('');
       setValue(null);
-      setType('');
+      setType(CardType.Null);
       setCondition(CardCondition.Good);
     } catch (error) {
       console.error('Error saving card:', error);
@@ -158,11 +159,11 @@ const AddCard = () => {
         />
       </View>
 
-      <BasicTextInput
-        value={type}
-        label='Card Type'
-        onChangeText={setType}
-        placeholder='Enter card type'
+      <DropDownMenu
+        title='Card Type'
+        data={cardTypeArray}
+        setSelected={setType}
+        placeholder='Card Type'
       />
 
       <View style={styles.valueContainer}>
@@ -182,24 +183,12 @@ const AddCard = () => {
       </View>
 
       {/* Dropdown to select card condition */}
-      <View>
-        <Text style={styles.label}>Condition</Text>
-      </View>
-
-      <View style={styles.dropContainer}>
-        <DropDownPicker
-          open={conditionOpen}
-          value={condition} // Match the enum type
-          items={[
-            { label: 'Bad', value: CardCondition.Bad },
-            { label: 'Good', value: CardCondition.Good },
-            { label: 'Excellent', value: CardCondition.Excellent },
-            { label: 'Mint', value: CardCondition.Mint },
-          ]}
-          setOpen={setConditionOpen}
-          setValue={setCondition}
-        />
-      </View>
+      <DropDownMenu
+        title='Condition'
+        data={cardConditionArray}
+        setSelected={setCondition}
+        placeholder='Condition'
+      />
 
       {/* Submit button */}
       <BasicButton
@@ -229,7 +218,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  valueContainer: { 
+  valueContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     rowGap: 4,
