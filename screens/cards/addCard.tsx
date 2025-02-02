@@ -23,7 +23,6 @@ import BasicButton from '../../components/BasicButton';
 import BasicNumberInput from '../../components/BasicNumberInput';
 import CurrencyInput from 'react-native-currency-input';
 import SetDropdown from '../../components/SetDropdown';
-import DropDownMenu from '@/components/DropDownMenu';
 
 const AddCard = () => {
   const { sets } = useSetStore();
