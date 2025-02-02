@@ -5,7 +5,13 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 // Interfaces
-import { Card, CardCondition, cardConditionArray, CardType, cardTypeArray } from '../../interfaces';
+import {
+  Card,
+  CardCondition,
+  cardConditionArray,
+  CardType,
+  cardTypeArray,
+} from '../../interfaces';
 // Theme
 import { themeCommon } from '../../styles/theme';
 // Store
@@ -33,6 +39,7 @@ const AddCard = () => {
     CardCondition.Excellent
   );
 
+  const [typeOpen, setTypeOpen] = useState(false);
   const [conditionOpen, setConditionOpen] = useState(false);
   const [setsOpen, setSetsOpen] = useState(false);
 
@@ -159,12 +166,15 @@ const AddCard = () => {
         />
       </View>
 
-      <DropDownMenu
-        title='Card Type'
-        data={cardTypeArray}
-        setSelected={setType}
-        placeholder='Card Type'
-      />
+      <View style={styles.dropContainer}>
+        <DropDownPicker
+          open={typeOpen}
+          value={type} // Match the enum type
+          items={cardTypeArray}
+          setOpen={setTypeOpen}
+          setValue={setType}
+        />
+      </View>
 
       <View style={styles.valueContainer}>
         <Text style={styles.valueLabel}>Value: £</Text>
@@ -183,12 +193,15 @@ const AddCard = () => {
       </View>
 
       {/* Dropdown to select card condition */}
-      <DropDownMenu
-        title='Condition'
-        data={cardConditionArray}
-        setSelected={setCondition}
-        placeholder='Condition'
-      />
+      <View style={styles.dropContainer}>
+        <DropDownPicker
+          open={conditionOpen}
+          value={condition} // Match the enum type
+          items={cardConditionArray}
+          setOpen={setConditionOpen}
+          setValue={setCondition}
+        />
+      </View>
 
       {/* Submit button */}
       <BasicButton

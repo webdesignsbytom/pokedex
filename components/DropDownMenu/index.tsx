@@ -26,7 +26,7 @@ const DropDownMenu = <T,>({
           label: item.label, // Set the label from the item label
           value: item.label, // Set the value to the item label
         }))}
-        setValue={setSelected} // Updates the item when an item is selected
+        setValue={(value) => setSelected(value)}
         placeholder={placeholder}
         multiple={false} // Single selection only
         setOpen={setIsOpen} // Controls whether the dropdown is open or closed
