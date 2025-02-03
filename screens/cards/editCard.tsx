@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   Alert,
+  View,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DropDownPicker from 'react-native-dropdown-picker'; // Import the DropDownPicker
@@ -18,6 +19,7 @@ import {
   CardCondition,
   cardTypeArray,
   CardType,
+  cardConditionArray,
 } from '../../interfaces';
 // Themes
 import { themeCommon } from '../../styles/theme';
@@ -28,6 +30,8 @@ import BasicTextInput from '../../components/BasicTextInput';
 import BasicButton from '../../components/BasicButton';
 import BasicNumberInput from '../../components/BasicNumberInput';
 import DropDownMenu from '@/components/DropDownMenu';
+import SetDropdown from '@/components/SetDropdown';
+import { useSetStore } from '@/store';
 
 type EditCardRouteProp = RouteProp<RootStackParamList, 'EditCard'>;
 
@@ -39,15 +43,21 @@ const EditCard = ({
   navigation: any;
 }) => {
   const { card } = route.params;
+  const { sets } = useSetStore();
 
   const { cards, loadCards, removeCard } = useCardStore(); // Use store methods
 
   const [editedCard, setEditedCard] = useState<Card>(card);
-  const [selectedType, setSelectedType] = useState<CardType>(card.type ?? CardType.Null); // Fallback if type is null
-  const [open, setOpen] = useState(false); // State for DropDownPicker
+
+  const [type, setType] = useState<CardType | null>(card.type);
+  const [set, setSet] = useState<string>('');
   const [condition, setCondition] = useState<CardCondition | null>(
     card.condition
   );
+
+  const [typeOpen, setTypeOpen] = useState(false);
+  const [conditionOpen, setConditionOpen] = useState(false);
+  const [setsOpen, setSetsOpen] = useState(false);
 
   // Sync the condition value with the editedCard state
   useEffect(() => {
@@ -60,8 +70,7 @@ const EditCard = ({
 
   const handleSave = async () => {
     try {
-      // Update the card with the selected type
-      const updatedCard = { ...editedCard, type: selectedType };
+      const updatedCard = { ...editedCard };
       const cardExists = cards.find((item) => item.id === updatedCard.id);
 
       if (cardExists) {
@@ -158,19 +167,28 @@ const EditCard = ({
         placeholder='Edit card number'
       />
 
-      <TextInput
-        style={styles.input}
-        value={editedCard.set || ''}
-        onChangeText={(text) => setEditedCard({ ...editedCard, set: text })}
-        placeholder='Card Set'
-      />
+      <View style={styles.dropContainer}>
+        <SetDropdown
+          sets={sets}
+          set={set}
+          setSet={setSet}
+          open={setsOpen}
+          setOpen={setSetsOpen}
+        />
+      </View>
 
-<DropDownMenu
-        title='Card Type'
-        data={cardTypeArray}
-        setSelected={setSelectedType} // Set local state here
-        placeholder='Card Type'
-      />
+      <View style={styles.dropContainer}>
+        <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 10 }}>
+          Type
+        </Text>
+        <DropDownPicker
+          open={typeOpen}
+          value={type} // Match the enum type
+          items={cardTypeArray}
+          setOpen={setTypeOpen}
+          setValue={setType}
+        />
+      </View>
 
       <BasicNumberInput
         value={editedCard.value || null}
@@ -182,20 +200,19 @@ const EditCard = ({
       {/* DropDownPicker for condition */}
       <Text style={styles.text}>Condition:</Text>
 
-      <DropDownPicker
-        open={open}
-        value={condition} // Match the enum type
-        items={[
-          { label: 'Bad', value: CardCondition.Bad },
-          { label: 'Good', value: CardCondition.Good },
-          { label: 'Excellent', value: CardCondition.Excellent },
-          { label: 'Mint', value: CardCondition.Mint },
-        ]}
-        setOpen={setOpen}
-        setValue={setCondition}
-        containerStyle={styles.dropdownContainer}
-        style={styles.dropdown}
-      />
+      {/* Dropdown to select card condition */}
+      <View style={styles.dropContainer}>
+        <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 10 }}>
+          Condition
+        </Text>
+        <DropDownPicker
+          open={conditionOpen}
+          value={condition} // Match the enum type
+          items={cardConditionArray}
+          setOpen={setConditionOpen}
+          setValue={setCondition}
+        />
+      </View>
 
       <BasicButton
         command={handleSave}
@@ -222,6 +239,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingLeft: 8,
+  },
+  dropContainer: {
+    paddingTop: 4,
+    paddingBottom: 6,
   },
   text: {
     fontSize: 16,

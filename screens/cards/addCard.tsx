@@ -166,6 +166,9 @@ const AddCard = () => {
       </View>
 
       <View style={styles.dropContainer}>
+        <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 10 }}>
+          Select Type
+        </Text>
         <DropDownPicker
           open={typeOpen}
           value={type} // Match the enum type
@@ -193,6 +196,9 @@ const AddCard = () => {
 
       {/* Dropdown to select card condition */}
       <View style={styles.dropContainer}>
+        <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 10 }}>
+          Select Condition
+        </Text>
         <DropDownPicker
           open={conditionOpen}
           value={condition} // Match the enum type
