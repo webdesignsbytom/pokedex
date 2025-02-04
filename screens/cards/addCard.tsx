@@ -162,7 +162,7 @@ const AddCard = () => {
       />
 
       <View style={styles.checkboxRow}>
-        <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 10 }}>First Edition</Text>
+        <Text style={{ fontSize: 16, fontWeight: '600' }}>First Edition</Text>
         <Checkbox
           status={firstEdition ? 'checked' : 'unchecked'}
           onPress={() => setFirstEdition(!firstEdition)}

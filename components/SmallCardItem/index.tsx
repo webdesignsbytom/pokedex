@@ -1,9 +1,9 @@
 import { View, Text, Image, StyleSheet, Button } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from '@react-navigation/native';
 // Interfaces
-import { Card, RootStackParamList } from '../../interfaces'; 
+import { Card, RootStackParamList } from '../../interfaces';
 // Theme
 import { themeCommon } from '../../styles/theme';
 // Components
@@ -16,13 +16,16 @@ interface SmallCardItemProps {
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'EditCard'>;
 
 const SmallCardItem: React.FC<SmallCardItemProps> = ({ card }) => {
-  const navigation = useNavigation<NavigationProp>(); 
+  const navigation = useNavigation<NavigationProp>();
 
   return (
     <View key={card.number} style={styles.card}>
       <Image source={{ uri: card.image }} style={styles.image} />
       <View style={styles.cardData}>
-        <Text style={styles.nameText}>{card.name}</Text>
+        <View style={styles.cardRow}>
+          <Text style={styles.nameText}>{card.name}</Text>
+          <Text style={styles.nameText}>{card.firstEdition && '1st'}</Text>
+        </View>
         <Text style={styles.text}>Set: {card.set}</Text>
         <Text style={styles.text}>Type: {card.type}</Text>
         <Text style={styles.text}>£{card.value}</Text>
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
     marginVertical: 4,
-    marginRight: 4
+    marginRight: 4,
   },
   image: {
     width: '100%',
@@ -82,5 +85,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     textAlign: 'left',
+  },
+  cardRow: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    marginBottom: 4,
   },
 });

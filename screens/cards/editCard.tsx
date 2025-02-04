@@ -33,6 +33,7 @@ import DropDownMenu from '@/components/DropDownMenu';
 import SetDropdown from '@/components/SetDropdown';
 import { useSetStore } from '@/store';
 import CurrencyInput from 'react-native-currency-input';
+import { Checkbox } from 'react-native-paper';
 
 type EditCardRouteProp = RouteProp<RootStackParamList, 'EditCard'>;
 
@@ -53,6 +54,7 @@ const EditCard = ({
   const [value, setValue] = useState<number | null>(card.value);
   const [type, setType] = useState<CardType | null>(card.type);
   const [set, setSet] = useState<string | null>(card.set);
+  const [firstEdition, setFirstEdition] = useState<boolean>(card.firstEdition);
   const [condition, setCondition] = useState<CardCondition | null>(
     card.condition
   );
@@ -78,6 +80,7 @@ const EditCard = ({
         set,
         condition,
         value,
+        firstEdition,
       };
 
       const cardExists = cards.find((item) => item.id === updatedCard.id);
@@ -169,6 +172,17 @@ const EditCard = ({
         onChangeText={(text) => setEditedCard({ ...editedCard, name: text })}
         placeholder='Card Name'
       />
+
+      <View style={styles.checkboxRow}>
+        <Text style={{ fontSize: 16, fontWeight: '600' }}>
+          First Edition
+        </Text>
+        <Checkbox
+          status={firstEdition ? 'checked' : 'unchecked'}
+          onPress={() => setFirstEdition(!firstEdition)}
+          color={themeCommon.primary}
+        />
+      </View>
 
       <BasicNumberInput
         value={editedCard.number || null}
@@ -286,9 +300,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
+  cardRow: {
+    flex: 2,
+  },
   dropdownContainer: {
     marginBottom: 12,
     height: 50,
+  },
+  nameText: {
+    marginBottom: 4,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   dropdown: {
     backgroundColor: '#fafafa',
@@ -309,6 +332,17 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingHorizontal: 8,
     fontSize: 18,
+  },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  checkboxLabel: {
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
