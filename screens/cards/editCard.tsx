@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text,
-  TextInput,
   StyleSheet,
   Image,
   ScrollView,
@@ -29,7 +28,6 @@ import { useCardStore } from '@/store/useCardStore';
 import BasicTextInput from '../../components/BasicTextInput';
 import BasicButton from '../../components/BasicButton';
 import BasicNumberInput from '../../components/BasicNumberInput';
-import DropDownMenu from '@/components/DropDownMenu';
 import SetDropdown from '@/components/SetDropdown';
 import { useSetStore } from '@/store';
 import CurrencyInput from 'react-native-currency-input';

@@ -4,6 +4,7 @@ import { createJSONStorage, persist, PersistOptions } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // Interfaces
 import { Card, Collection } from '../interfaces';
+// Data
 import { cardSeriesData } from '@/data/cardData';
 
 interface UserCardsState {
