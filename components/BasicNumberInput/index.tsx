@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     alignItems: 'center',
     marginVertical: 8, 
-    gap: 8,
+    gap: 12,
   },
   label: {
     marginRight: 10, // Space between label and input
@@ -50,10 +50,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1, // Take the remaining space
     borderWidth: 1,
-    borderColor: '#ccc',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    fontSize: 16,
+    borderColor: '#000',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    fontSize: 22,
+    backgroundColor: 'white',
   },
 });

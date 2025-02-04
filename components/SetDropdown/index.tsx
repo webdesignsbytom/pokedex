@@ -4,12 +4,13 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 // Define the SetDropdown component props type
 interface SetDropdownProps {
-  sets: { name: string }[];  // Array of sets, each with a name
-  set: string;               // The current selected set
-  setSet: React.Dispatch<React.SetStateAction<string>>;  // React state setter function
-  open: boolean;             // The state of the dropdown (open or closed)
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;  // Function to update the dropdown visibility
+  sets: { name: string }[];
+  set: string | null; // Allow null
+  setSet: React.Dispatch<React.SetStateAction<string | null>>; // Allow null
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 
 const SetDropdown: React.FC<SetDropdownProps> = ({ sets, set, setSet, open, setOpen }) => {
   return (

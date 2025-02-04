@@ -32,6 +32,7 @@ import BasicNumberInput from '../../components/BasicNumberInput';
 import DropDownMenu from '@/components/DropDownMenu';
 import SetDropdown from '@/components/SetDropdown';
 import { useSetStore } from '@/store';
+import CurrencyInput from 'react-native-currency-input';
 
 type EditCardRouteProp = RouteProp<RootStackParamList, 'EditCard'>;
 
@@ -49,8 +50,9 @@ const EditCard = ({
 
   const [editedCard, setEditedCard] = useState<Card>(card);
 
+  const [value, setValue] = useState<number | null>(card.value);
   const [type, setType] = useState<CardType | null>(card.type);
-  const [set, setSet] = useState<string>('');
+  const [set, setSet] = useState<string | null>(card.set);
   const [condition, setCondition] = useState<CardCondition | null>(
     card.condition
   );
@@ -70,7 +72,14 @@ const EditCard = ({
 
   const handleSave = async () => {
     try {
-      const updatedCard = { ...editedCard };
+      const updatedCard = {
+        ...editedCard,
+        type,
+        set,
+        condition,
+        value,
+      };
+
       const cardExists = cards.find((item) => item.id === updatedCard.id);
 
       if (cardExists) {
@@ -80,6 +89,7 @@ const EditCard = ({
         await AsyncStorage.setItem('userCards', JSON.stringify(updatedCards));
         loadCards();
       }
+
       navigation.goBack();
     } catch (err) {
       console.error('Error saving card:', err);
@@ -170,8 +180,8 @@ const EditCard = ({
       <View style={styles.dropContainer}>
         <SetDropdown
           sets={sets}
-          set={set}
-          setSet={setSet}
+          set={set ?? ''}
+          setSet={(value) => setSet(value ?? '')}
           open={setsOpen}
           setOpen={setSetsOpen}
         />
@@ -197,8 +207,21 @@ const EditCard = ({
         placeholder='Edit card value'
       />
 
-      {/* DropDownPicker for condition */}
-      <Text style={styles.text}>Condition:</Text>
+      <View style={styles.valueContainer}>
+        <Text style={styles.valueLabel}>Value: £</Text>
+        <CurrencyInput
+          value={value}
+          onChangeValue={setValue}
+          delimiter=','
+          separator='.'
+          precision={2}
+          minValue={0}
+          style={styles.numInput}
+          onChangeText={(formattedValue) => {
+            console.log(formattedValue);
+          }}
+        />
+      </View>
 
       {/* Dropdown to select card condition */}
       <View style={styles.dropContainer}>
@@ -225,13 +248,15 @@ const EditCard = ({
         text='Delete Card'
         color={themeCommon.primary}
       />
+      <View style={{ paddingBottom: 32 }}></View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex: 1,
+    padding: 24,
   },
   input: {
     height: 40,
@@ -248,6 +273,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
   },
+  valueContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    rowGap: 4,
+    paddingTop: 4,
+    paddingBottom: 8,
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  valueLabel: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
   dropdownContainer: {
     marginBottom: 12,
     height: 50,
@@ -260,6 +298,17 @@ const styles = StyleSheet.create({
   },
   dropdownStyle: {
     backgroundColor: '#fafafa',
+  },
+  numInput: {
+    width: '100%',
+    maxWidth: 200,
+    borderWidth: 1,
+    borderColor: '#000',
+    backgroundColor: 'white',
+    borderRadius: 6,
+    marginTop: 8,
+    paddingHorizontal: 8,
+    fontSize: 18,
   },
 });
 

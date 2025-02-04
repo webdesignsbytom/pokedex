@@ -81,6 +81,7 @@ export interface Card {
   condition: CardCondition | null;
   value: number | null;
   type: CardType | null;
+  firstEdition: boolean;
 }
 
 export interface Collection {

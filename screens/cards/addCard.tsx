@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
+import { Checkbox } from 'react-native-paper';
 // Interfaces
 import {
   Card,
@@ -30,9 +36,10 @@ const AddCard = () => {
 
   const [image, setImage] = useState<string>('');
   const [name, setName] = useState<string>('');
-  const [set, setSet] = useState<string>('');
+  const [set, setSet] = useState<string | null>('');
   const [number, setNumber] = useState<number | null>(null);
   const [value, setValue] = useState<number | null>(null);
+  const [firstEdition, setFirstEdition] = useState<boolean>(false);
   const [type, setType] = useState<CardType>(CardType.Null);
   const [condition, setCondition] = useState<CardCondition>(
     CardCondition.Excellent
@@ -86,10 +93,11 @@ const AddCard = () => {
         name: name.trim(),
         image,
         number,
-        set: set.trim() || null,
+        set: (set && set.trim()) || null,
         condition,
         value,
         type,
+        firstEdition,
       };
 
       await addCard(newCard); // ✅ Use Zustand store instead of AsyncStorage
@@ -112,7 +120,6 @@ const AddCard = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.headerText}>Add New Card</Text>
       {errors === 'Failed to serialize data.' && (
         <View>
           <Text>Failed to serialize data.</Text>
@@ -154,18 +161,37 @@ const AddCard = () => {
         placeholder='Enter card number'
       />
 
+      <View style={styles.checkboxRow}>
+        <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 10 }}>First Edition</Text>
+        <Checkbox
+          status={firstEdition ? 'checked' : 'unchecked'}
+          onPress={() => setFirstEdition(!firstEdition)}
+          color={themeCommon.primary}
+        />
+      </View>
+
       {/* DropDownPicker for Card Set */}
-      <View style={styles.dropContainer}>
+      <View
+        style={[
+          styles.dropContainer,
+          setsOpen ? styles.dropContainerOpen : null,
+        ]}
+      >
         <SetDropdown
           sets={sets}
           set={set}
-          setSet={setSet}
+          setSet={(value) => setSet(value ?? '')}
           open={setsOpen}
           setOpen={setSetsOpen}
         />
       </View>
 
-      <View style={styles.dropContainer}>
+      <View
+        style={[
+          styles.dropContainer,
+          typeOpen ? styles.dropContainerOpen : null,
+        ]}
+      >
         <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 10 }}>
           Select Type
         </Text>
@@ -183,8 +209,8 @@ const AddCard = () => {
         <CurrencyInput
           value={value}
           onChangeValue={setValue}
-          delimiter='.'
-          separator=','
+          delimiter=','
+          separator='.'
           precision={2}
           minValue={0}
           style={styles.numInput}
@@ -195,7 +221,12 @@ const AddCard = () => {
       </View>
 
       {/* Dropdown to select card condition */}
-      <View style={styles.dropContainer}>
+      <View
+        style={[
+          styles.dropContainer,
+          conditionOpen ? styles.dropContainerOpen : null,
+        ]}
+      >
         <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 10 }}>
           Select Condition
         </Text>
@@ -224,17 +255,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 24,
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
   },
   dropContainer: {
     paddingTop: 4,
     paddingBottom: 6,
+    zIndex: 1, // Default zIndex
   },
-  headerText: {
-    textAlign: 'center',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  dropContainerOpen: {
+    zIndex: 1000, // Higher zIndex when open
   },
   valueContainer: {
     flexDirection: 'row',
@@ -257,7 +286,21 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 200,
     borderWidth: 1,
-    borderColor: '#333',
-    borderRadius: 5,
+    borderColor: '#000',
+    backgroundColor: 'white',
+    borderRadius: 6,
+    marginTop: 8,
+    paddingHorizontal: 8,
+    fontSize: 18,
+  },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  checkboxLabel: {
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Horizontal layout
     alignItems: 'center', // Align vertically in the center
     marginVertical: 8, // Add vertical spacing
+    gap: 12,
   },
   label: {
     marginRight: 10, // Space between label and input
@@ -66,10 +67,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1, // Take the remaining space
     borderWidth: 1,
-    borderColor: '#ccc',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    fontSize: 16,
+    borderColor: '#000',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    fontSize: 22,
+    backgroundColor: 'white',
   },
 });
