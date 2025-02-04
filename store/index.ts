@@ -1,6 +1,6 @@
 import { StateCreator, create } from "zustand";
 import { Appearance } from "react-native";
-import { persist, PersistOptions } from "zustand/middleware";
+import { createJSONStorage, persist, PersistOptions } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // Interfaces
 import { Card, Collection } from '../interfaces';
@@ -24,7 +24,7 @@ export const useCardsPersistentStore = create<UserCardsState>(
     }),
     {
       name: "user-cards-storage",
-      // getStorage: () => AsyncStorage,
+      storage: createJSONStorage(() => AsyncStorage),
     }
   )
 );
@@ -59,7 +59,7 @@ export const useAppConfigStore = {
       }),
       {
         name: "app-config-storage",
-        // getStorage: () => AsyncStorage,
+        storage: createJSONStorage(() => AsyncStorage),
       }
     )
   ),
